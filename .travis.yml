@@ -6,8 +6,8 @@ before_install:
 - npm install -g hexo
 - npm install -g hexo-cli
 before_script:
-- git config --global user.name 'yourname'
-- git config --global user.email 'youremail'
+- git config --global user.name 'dogold'
+- git config --global user.email 'ligr1991@gmail.com'
 - sed -i'' "s~git@github.com:dogold/dogold.github.io.git.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com/dogold/dogold.github.io.git.git~" _config.yml
 install:
 - npm install
@@ -16,3 +16,6 @@ script:
 - hexo generate
 after_success:
 - hexo deploy
+
+# write log
+- process.stdout.write("deploy")
