@@ -4,7 +4,7 @@
 
 # Site
 title: Dogold
-subtitle:
+subtitle: Coding changes the world.
 description:
 author: Dogold
 language:
@@ -44,7 +44,7 @@ highlight:
   tab_replace:
 
 # Category & Tag
-default_category: uncategorized
+default_category: 随笔
 category_map:
 tag_map:
 
