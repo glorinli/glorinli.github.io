@@ -15,10 +15,6 @@ install:
 - npm install
 script:
 - hexo clean
-- process.stdout.write("Going to generate")
 - hexo generate
 after_success:
-- process.stdout.write("Going to deploy")
 - hexo deploy
-after_failure:
-- process.stdout.write("Failed")
