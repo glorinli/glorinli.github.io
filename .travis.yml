@@ -18,3 +18,5 @@ script:
 - hexo generate
 after_success:
 - hexo deploy
+after_failure:
+- cat /home/travis/builds/evantahler/actionHero/npm-debug.log
