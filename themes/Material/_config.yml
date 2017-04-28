@@ -11,20 +11,13 @@ menu:
     url: about
     intro: ""
     icon: "fa fa-info-circle"
-  - title: RSS
-    url: atom.xml
-    intro: "这是一个订阅源"
-    icon: "fa fa-rss"
+
 
 links:
   - title: "GitHub"
-    url: http://www.github.com/wayou
-    intro: "码农之家"
+    url: https://github.com/dogold
+    intro: "Dogold"
     icon: "fa fa-github"
-  - title: "微博"
-    url: http://www.weibo.com/liuwayong
-    intro: "twitter的本地化版本"
-    icon: "fa fa-weibo"
 
 widgets:
 - recent_posts
