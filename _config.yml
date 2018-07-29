@@ -3,10 +3,10 @@
 ## Source: https://github.com/hexojs/hexo/
 
 # Site
-title: Dogold
+title: Glorin
 subtitle: Coding changes the world.
 description:
-author: Dogold
+author: Glorin
 language: zh-CN
 timezone: Asia/Shanghai
 
@@ -69,5 +69,5 @@ theme: Material
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
   type: git
-  repository: git@github.com:dogold/dogold.github.io.git
+  repository: git@github.com:glorinli/glorinli.github.io.git
   branch: master
