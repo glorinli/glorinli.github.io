@@ -5,17 +5,24 @@ node_js: stable
 branches:
   only:
   - hexo #源码分支名称
+  
 before_install:
+
 - npm install -g hexo
 - npm install -g hexo-cli
+
 before_script:
 - git config --global user.name 'glorinli'
 - git config --global user.email 'ligr1991@gmail.com'
 - sed -i'' "s~git@github.com:glorinli/glorinli.github.io.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com:glorinli/glorinli.github.io.git~" _config.yml
+- cat _config.yml
+
 install:
 - npm install
+
 script:
 - hexo clean
 - hexo generate
+
 after_success:
 - hexo deploy
