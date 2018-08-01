@@ -14,7 +14,7 @@ before_install:
 before_script:
 - git config --global user.name 'glorinli'
 - git config --global user.email 'ligr1991@gmail.com'
-- sed -i'' "s~git@github.com:glorinli/glorinli.github.io.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com:glorinli/glorinli.github.io.git~" _config.yml
+- sed -i'' "s~git@github.com:glorinli/glorinli.github.io.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com/glorinli/glorinli.github.io.git~" _config.yml
 - cat _config.yml
 
 install:
