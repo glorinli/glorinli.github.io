@@ -1,5 +1,5 @@
 ---
-title: 【Android】NDK b便宜，缺少gnu-libstdc++ 相关的资源
+title: 【Android】NDK 编译，缺少 gnu-libstdc++ 相关的资源
 date: 2018-10-25
 ---
 # 问题
