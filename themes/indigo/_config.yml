@@ -21,9 +21,6 @@ menu:
   github:
     url: https://github.com/glorinli
     target: _blank
-  link:
-    text: 测试
-    url: /custom
 
 # 你的头像url
 avatar: /img/avatar.jpg

@@ -23,6 +23,8 @@ widgets:
 - recent_posts
 - links
 
+category_dir: categories
+
 rss:
 favicon: favicon.ico
 google_analytics:

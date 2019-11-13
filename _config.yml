@@ -12,7 +12,7 @@ timezone: Asia/Shanghai
 
 # URL
 ## If your site is put in a subdirectory, set url as 'http://yoursite.com/child' and root as '/child/'
-url: https://glorinli.github.io/
+url: https://glorin.xyz/
 root: /
 permalink: :year/:month/:day/:title/
 permalink_defaults:
@@ -46,7 +46,10 @@ highlight:
 # Category & Tag
 default_category: 随笔
 category_map:
+  Android: android
 tag_map:
+  Android: android
+  View: view
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
