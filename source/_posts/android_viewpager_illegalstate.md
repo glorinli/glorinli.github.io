@@ -1,6 +1,10 @@
 ---
 title: 【Android】ViewPager 出现IllegalStateException
 date: 2018-08-22
+categories:
+- Android
+tags:
+- Android
 ---
 # 问题
 使用ViewPager，动态加载页面，尽管修改了数据后，已经在主线程中调用了notifyDataSetChanged，还是出现以下错误

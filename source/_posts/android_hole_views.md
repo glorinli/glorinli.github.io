@@ -5,6 +5,7 @@ categories:
 - Android
 tags:
 - Android
+- View
 ---
 有时，我们需要在界面上绘制一个”洞“，如进行图片裁剪的时候，需要显示一个裁剪的范围，如图：
 

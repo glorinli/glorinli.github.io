@@ -1,6 +1,10 @@
 ---
 title: 优秀技术文章收藏 - Android篇
 date: 2017-04-27
+categories:
+- Android
+tags:
+- Android
 ---
 收藏优秀的技术文章，持续更新
 

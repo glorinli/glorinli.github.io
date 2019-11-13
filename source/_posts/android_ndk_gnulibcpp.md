@@ -1,6 +1,11 @@
 ---
 title: 【Android】NDK 编译，缺少 gnu-libstdc++ 相关的资源
 date: 2018-10-25
+categories:
+- Android
+tags:
+- Android
+- JNI
 ---
 # 问题
 使用 JNI 编译时，提示找不到 gnu-libstdc++ 相关的资源，NDK 版本是 18
