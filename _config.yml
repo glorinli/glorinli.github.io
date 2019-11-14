@@ -47,11 +47,13 @@ highlight:
 default_category: 随笔
 category_map:
   Android: android
+  Thoughts: thoughts
 tag_map:
   Android: android
   View: view
   JNI: jni
   Proguard: proguard
+  Asynchronized: async
 
 # Date / Time format
 ## Hexo uses Moment.js to parse and display date
