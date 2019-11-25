@@ -214,4 +214,4 @@ func (account *Account) Create() map[string]interface{} {
 
 注：笔者在mac os 10.15上，发现编译时需要添加-ldflags "-w"参数，否则会运行失败。
 ## 小结
-本文介绍了如何使用Golang + jwt构建一个建议的认证系统，可以让大家对用户认证有一个基本的概念，详细的代码也已经同步到github上，读者们可以clone下来参考：
+本文介绍了如何使用Golang + jwt构建一个建议的认证系统，可以让大家对用户认证有一个基本的概念，详细的代码也已经同步到github上，读者们可以clone下来参考：https://github.com/glorinli/go-jwt-simple-auth
