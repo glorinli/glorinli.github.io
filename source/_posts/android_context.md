@@ -67,7 +67,6 @@ public class ContextWrapper extends Context {
 ```
 
 由注释和代码可以发现，ContextWrapper 真的是一个 Wrapper，操作都转发给这个 mBase了，所以这是个代理类，我们要一探究竟，还是要去看 mBase。
-![](_v_images/20200317141508120_25543.png)
 
 我们看到，在 Activity， Application， Service 中，都有去调用 attachBaseContext，这就是给 mBase 赋值的地方了，这时候用 Android Studio 就找不着哪里调用了，于是我们转去看 AOSP 源码。
 我们先从 Activity 入手，已知 Activity 是在什么 ActivityThread 里面创建的（为什么已知，就要靠多研究啦，这里先不求甚解一下），搜了一下，我们发现了 attach 的地方：
@@ -128,4 +127,4 @@ public class ContextWrapper extends Context {
 
 再想想还是不对，Context 里面不是 还有个 mBase，这也是一个 Context 实例，所以恐怕还要 x2
 
-再想想，除了这些场景，还会有其他地方创建 Context 吗？这个就不深究了。
+再想想，除了这些场景，还会有其他地方创建 Context 吗？其实也会的，我们看 Context 的子类，还有一个 BackupAgent。
