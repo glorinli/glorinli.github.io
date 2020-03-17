@@ -8,9 +8,8 @@ branches:
   
 before_install:
 
-- rm -rf /home/travis/.nvm/versions/node/v13.11.0/bin/hexo
-- npm install -g hexo
-- npm install -g hexo-cli
+- npm install -g hexo --force
+- npm install -g hexo-cli --force
 
 before_script:
 - git config --global user.name 'glorinli'
