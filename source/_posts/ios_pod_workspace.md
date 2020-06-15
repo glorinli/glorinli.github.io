@@ -1,5 +1,5 @@
 ---
-title: 【iOS】Pod 错误: Could not automatically select an Xcode workspace
+title: 【iOS】Pod 错误 Could not automatically select an Xcode workspace
 date: 2020-06-06
 tags:
 - iOS
