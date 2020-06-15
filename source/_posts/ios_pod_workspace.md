@@ -5,7 +5,7 @@ tags:
 - iOS
 - Cocoapods
 categories:
-- iOs
+- iOS
 ---
 ##问题
 初尝 cocoapods，写好 Podfile 之后， pod install 一下，就出现了错误：
