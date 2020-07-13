@@ -12,6 +12,7 @@ categories:
 Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBinder，Binder 是 Android 系统最重要的组件之一，也是整个系统的基石。
 同时，Binder 也是一个系统设备 /dev/binder 对应的是 Binder 驱动，是 Binder 的核心。
 从实现机制上来说，Binder是一个token，用来标识一个服务，这个token可以跨进程地传递，拿到binder对象，就可以发起远程访问。
+
 ## Linux 常见的进程间通信方式及特点
 ### 共享内存
 无需拷贝
@@ -21,7 +22,8 @@ Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBi
 ### Socket
 速度慢，两次拷贝，适合低速通信，或跨设备通信
 ### 文件共享
-速度慢
+速度慢，同步状态难以维护
+
 ## 为什么采用 Binder
 * 效率高，仅需一次拷贝
 * 封装完善，由系统统一管理进程间的数据同步、线程池管理等等，使用方便
@@ -29,6 +31,7 @@ Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBi
 * 支持 Java 层，Native 层
 * 由系统统一处理uid，方便进行权限控制，安全性高
 * AIDL 工具支持直接生成Binder代码，方便使用
+
 ## Binder 主要概念
 ### IBinder
 代表一个可以远程访问的对象，所谓远程访问，就是跨进程访问。
