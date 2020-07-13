@@ -21,10 +21,6 @@ menu:
   github:
     url: https://github.com/glorinli
     target: _blank
-  listen:
-    text: 瞎哼哼
-    url: http://music.glorin.xyz/
-    target: _blank
 
 # 你的头像url
 avatar: /img/avatar.jpg
