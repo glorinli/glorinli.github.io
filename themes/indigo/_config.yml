@@ -79,7 +79,7 @@ postMessage: 原创文章，转载请注明出处，本文链接：<a href="<%- 
 cnzz: false
 
 # 百度统计，如要开启，改为你的 key
-baidu_tongji: false
+baidu_tongji: f5577b99cd40d2ae81f4ef6c3d6d6127
 
 # 腾讯分析，如要开启，输入站点id
 tajs: false
