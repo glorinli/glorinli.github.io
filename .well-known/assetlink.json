@@ -1,0 +1,15 @@
+[
+    {
+        "relation": [
+            "delegate_permission/common.handle_all_urls"
+        ],
+        "target": {
+            "namespace": "android_app",
+            "package_name": "xyz.glorin.dualsigningdemo",
+            "sha256_cert_fingerprints": [
+                "42:22:73:BF:F5:03:47:76:05:FF:20:DE:02:65:71:B6:F9:CE:53:70:25:A2:25:6E:15:F2:D2:EB:D1:5B:1C:3D",
+                "5E:86:89:0E:32:DC:5F:F1:AB:6E:09:8C:43:67:65:6F:6E:11:5F:A0:FA:4C:61:AE:11:85:5D:A5:93:8F:30:DF"
+            ]
+        }
+    }
+]
