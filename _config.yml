@@ -77,4 +77,4 @@ theme: indigo
 deploy:
   type: git
   repository: git@github.com:glorinli/glorinli.github.io.git
-  branch: master
+  branch: pages
