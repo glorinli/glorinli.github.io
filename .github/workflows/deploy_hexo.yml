@@ -1,0 +1,40 @@
+name: Deploy Hexo
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v1
+
+    - name: Setup Node.js environment
+      uses: actions/setup-node@v2-beta
+      with:
+        node-version: '12'
+        
+    - name: Set git environment
+      env: 
+        # 1. Add this private key and title as DEPLOY_KEY in this repo -> settings/secrets
+        # 2. Add corresponding public key and named as any text to the github page repo -> settings/deploy keys
+        GITHUB_REPO_TOKEN: ${{ secrets.GITHUB_REPO_TOKEN }}
+        USERNAME: glorinli
+        EMAIL: ligr1991@gmail.com
+      run: |
+        git config --global user.name "$USERNAME"
+        git config --global user.email "$EMAIL"
+        sed -i'' "s~git@github.com:glorinli/glorinli.github.io.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com/glorinli/glorinli.github.io.git~" _config.yml
+    - name: Setup Hexo environment
+      run: |
+        npm install -g hexo --force
+        npm install -g hexo-cli --force
+        npm install
+    - name: Deploy Hexo
+      run: |
+        hexo clean
+        hexo g
+        hexo d
