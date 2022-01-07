@@ -28,6 +28,7 @@ jobs:
         git config --global user.name "$USERNAME"
         git config --global user.email "$EMAIL"
         sed -i'' "s~git@github.com:glorinli/glorinli.github.io.git~https://${GITHUB_REPO_TOKEN}:x-oauth-basic@github.com/glorinli/glorinli.github.io.git~" _config.yml
+        cat _config.yml
     - name: Setup Hexo environment
       run: |
         npm install -g hexo --force
