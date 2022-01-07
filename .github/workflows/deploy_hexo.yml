@@ -21,7 +21,7 @@ jobs:
       env: 
         # 1. Add this private key and title as DEPLOY_KEY in this repo -> settings/secrets
         # 2. Add corresponding public key and named as any text to the github page repo -> settings/deploy keys
-        GITHUB_REPO_TOKEN: ${{ secrets.GITHUB_REPO_TOKEN }}
+        GITHUB_REPO_TOKEN: ${{ secrets.REPO_TOKEN }}
         USERNAME: glorinli
         EMAIL: ligr1991@gmail.com
       run: |
