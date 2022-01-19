@@ -16,7 +16,7 @@
         </style>
     </head>
     <body>
-        <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit()"/>
-        <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.RCHelpArticle.exit()"/>
+        <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
+        <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
     </body>
 </html>
