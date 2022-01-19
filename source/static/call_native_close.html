@@ -1,8 +1,22 @@
 <!DOCTYPE html>
 <html>
-<head>
+    <head>
+        <style type="text/css">
+            .exit_button {
+                background-color: lightblue;
+                width: calc(100% - 20px);
+                height: 60px;
+                border-width: 1px;
+                box-sizing: border-box;
+                margin: 10px;
+                border-color: gray;
+                border-radius: 10px;
+                font-size: large;
+            }
+        </style>
     </head>
     <body>
-        <input type="button" value="Exit page" onclick="window.RCHelpArticle.exit()"/>
+        <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit()"/>
+        <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.RCHelpArticle.exit()"/>
     </body>
 </html>
