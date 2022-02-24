@@ -1,5 +1,5 @@
 ---
-title: [WIP]【Android】自定义 Lint 检查（二）
+title: 【Android】自定义 Lint 检查（二）
 date: 2022-01-18
 categories:
 - Android
@@ -90,7 +90,7 @@ afterEvaluate {
 ### 2. 打包发布
 只需要执行: `./gradlew :wrapper:publish` 即可发布成功。
 或者在 AS Gradle 界面执行task：
-![](../../images/2022-02-24-22-36-47.png)
+![publish task](/imgs/2022-02-24-22-36-47.png)
 # 代码
 本文工程代码: https://github.com/glorinli/CustomLintChecker
 顺便推荐一个免费的 Maven server: https://repsy.io/
