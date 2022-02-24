@@ -22,6 +22,8 @@ compileOnly "com.android.tools.lint:lint-api:$LINT_VERSION"
 compileOnly "com.android.tools.lint:lint-checks:$LINT_VERSION"
 ```
 其中 LINT_VERSION = 30.0.3
+
+注：AGP7 以上需要 Java 11 的环境，因此如果升级后无法编译，需要安装 Java 11 且在 AS 里面把 JDK 设置为 Java 11.
 ## 发布到 Maven
 接下来就是发布到 maven repo 了，其实就是将 wrapper module 发布到 maven，如果你已经很熟悉 gradle maven 的发布，那下面的内容就可以不用看了。
 要发布到maven，我们只需要两个步骤：
@@ -32,7 +34,7 @@ apply plugin: 'maven-publish'
 
 group = GROUP
 version = VERSION
-def repositoryUrl = version.endsWith('SNAPSHOT') ? SNAPSHOT_REPOSITORY_URL : RELEASE_REPOSITORY_URL
+def repositoryUrl = MAVEN_REPOSITORY_URL
 
 afterEvaluate {
     publishing {
@@ -53,13 +55,24 @@ afterEvaluate {
             maven {
                 allowInsecureProtocol true
                 url = repositoryUrl
+
+                credentials {
+                    username MAVEN_USER
+                    password MAVEN_PWD
+                }
             }
         }
     }
 
     publish {
         doLast {
-            println "Custom Lint Checker Uploaded"
+            println "*********************************************************************************"
+            println "Lint Checker Uploaded"
+            println "Group           : " + GROUP
+            println "ArtifactId      : " + ARTIFACT_ID
+            println "Version         : " + version
+            println "Repository      : " + repositoryUrl
+            println "*********************************************************************************"
         }
     }
 }
@@ -69,9 +82,15 @@ afterEvaluate {
 * GROUP: maven 组，例如 xyz.glorin.lint
 * ARTIFACT_ID: 产物的ID，例如 customlint
 * VERSION: 版本号
+* MAVEN_REPOSITORY_URL: Maven 仓库地址
+* MAVEN_USER: Maven 仓库用户名（开启了认证的情况下才需要）
+* MAVEN_PWD: Maven 仓库密码
 最终我们在主工程使用的时候，完整的依赖就是:
 `$GROUP:$ARTIFACT_ID:$VERSION (xyz.glorin.lint:customlint:1.0.0)`
 ### 2. 打包发布
 只需要执行: `./gradlew :wrapper:publish` 即可发布成功。
+或者在 AS Gradle 界面执行task：
+![](../../images/2022-02-24-22-36-47.png)
 # 代码
 本文工程代码: https://github.com/glorinli/CustomLintChecker
+顺便推荐一个免费的 Maven server: https://repsy.io/
