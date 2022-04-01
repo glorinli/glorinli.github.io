@@ -1,5 +1,5 @@
 ---
-title: 【Android】Android Activity启动流程简析(基于Android10代码)
+title: 【Android】Android Activity 启动流程简析(基于Android 10 代码)
 date: 2020-07-27
 categories:
 - Android
@@ -9,15 +9,15 @@ tags:
 - ActivityManagerService
 ---
 ## 简介
-本文基于Android10代码，分析了Activity的启动流程，Activity启动流程可以分为三大块：
+本文基于 Android 10 代码，分析了 Activity 的启动流程，Activity 启动流程可以分为三大块：
 1. 发起，在调用者进程中执行
-2. 管理，在system_server进程中执行，主要是ActivityManagerService在做工作
-3. 执行，在被启动的Activity所在的进程中执行
+2. 管理，在 system_server 进程中执行，主要是 ActivityManagerService 在做工作
+3. 执行，在被启动的 Activity 所在的进程中执行
 
 ## 发起
-我们知道，要启动一个Activity，常见的有两种方式
-1. 调用Activity.startActivity
-2. 调用Context.startActivity
+我们知道，要启动一个 Activity，常见的有两种方式
+1. 调用 Activity.startActivity
+2. 调用 Context.startActivity
 
 下面我们来分析一下这两种方式。
 ### Activity.startActivity
