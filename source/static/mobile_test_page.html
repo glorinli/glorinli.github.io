@@ -2,8 +2,20 @@
 <html>
     <head>
         <style type="text/css">
+            .action_button {
+                background-color: #066FAC;
+                width: calc(100% - 20px);
+                height: 60px;
+                color: white;
+                border-width: 1px;
+                box-sizing: border-box;
+                margin: 10px;
+                border-color: gray;
+                border-radius: 10px;
+                font-size: large;
+            }
             .exit_button {
-                background-color: lightblue;
+                background-color: #FF8800;
                 width: calc(100% - 20px);
                 height: 60px;
                 border-width: 1px;
@@ -14,7 +26,7 @@
                 font-size: large;
             }
             .link {
-                background-color: yellowgreen;
+                background-color: #46BE59;
                 width: calc(100% - 20px);
                 height: 30px;
                 line-height: 30px;
@@ -31,6 +43,11 @@
         </style>
     </head>
     <body>
+        <h2 class="section_header">Actions:</h2>
+        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="window.RCUnity.handlePendoEvent('1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="window.webkit.messageHandlers.handlePendoEvent.postMessage('1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="window.RCUnity.handleDeeplink('r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="window.webkit.messageHandlers.handlePendoEvent.postMessage('r/message');"/>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
         <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
