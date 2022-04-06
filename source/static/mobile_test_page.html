@@ -41,13 +41,25 @@
                 margin: 10px;
             }
         </style>
+        <script>
+            function callAndroidWebpageAction(type, data) {
+                var result = window.unityActionHandler.handleWebpageAction(type, data);
+                document.getElementById('action_result').innerHTML = "Android Result: " + result;
+            }
+
+            function calliOSWebpageAction(type, data) {
+                var result = window.webkit.messageHandlers.handleWebpageAction.postMessage(type, data);
+                document.getElementById('action_result').innerHTML = "iOS Result: " + result;
+            }
+        </script>
     </head>
     <body>
         <h2 class="section_header">Actions:</h2>
-        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="window.unityActionHandler.handleWebpageAction('pendo', '1234567890');"/>
-        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="window.webkit.messageHandlers.handleWebpageAction.postMessage('pendo', '1234567890');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="window.unityActionHandler.handleWebpageAction('cta', 'r/message');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="window.webkit.messageHandlers.handleWebpageAction.postMessage('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="callAndroidWebpageAction('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="calliOSWebpageAction('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="calliOSWebpageAction('cta', 'r/message');"/>
+        <div id="action_result"/>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
         <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
