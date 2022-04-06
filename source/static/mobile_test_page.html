@@ -51,6 +51,10 @@
                 var result = window.webkit.messageHandlers.handleWebpageAction.postMessage(type, data);
                 document.getElementById('action_result').innerHTML = "iOS Result: " + result;
             }
+
+            function webpageCallback(type, result) {
+                document.getElementById("callback_result").innerHTML = "Call back with type " + type + "and result " + result;
+            }
         </script>
     </head>
     <body>
@@ -60,6 +64,7 @@
         <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
         <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="calliOSWebpageAction('cta', 'r/message');"/>
         <div id="action_result"/>
+        <div id="callback_result"/>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
         <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
