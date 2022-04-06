@@ -44,10 +44,10 @@
     </head>
     <body>
         <h2 class="section_header">Actions:</h2>
-        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="window.RCUnity.handlePendoEvent('1234567890');"/>
-        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="window.webkit.messageHandlers.handlePendoEvent.postMessage('1234567890');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="window.RCUnity.handleDeeplink('r/message');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="window.webkit.messageHandlers.handlePendoEvent.postMessage('r/message');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="window.unityActionHandler.handleWebpageAction('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="window.webkit.messageHandlers.handleWebpageAction.postMessage('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="window.unityActionHandler.handleWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="window.webkit.messageHandlers.handleWebpageAction.postMessage('cta', 'r/message');"/>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
         <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
