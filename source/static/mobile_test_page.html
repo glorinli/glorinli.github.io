@@ -46,13 +46,11 @@
         </style>
         <script>
             function callAndroidWebpageAction(type, data) {
-                var result = window.unityActionHandler.handleWebpageAction(JSON.stringify({actionType: type, actionData: data}));
-                document.getElementById('action_result').innerHTML = "Android Result: " + result;
+                window.unityActionHandler.handleWebpageAction(JSON.stringify({actionType: type, actionData: data}));
             }
 
             function calliOSWebpageAction(type, data) {
-                var result = window.webkit.messageHandlers.handleWebpageAction.postMessage(JSON.stringify({actionType: type, actionData: data}));
-                document.getElementById('action_result').innerText = "iOS Result: " + result;
+                window.webkit.messageHandlers.handleWebpageAction.postMessage(JSON.stringify({actionType: type, actionData: data}));
             }
 
             function unityWebpageCallback(type, result) {
@@ -66,7 +64,6 @@
         <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="calliOSWebpageAction('pendo', '1234567890');"/>
         <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
         <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="calliOSWebpageAction('cta', 'r/message');"/>
-        <h3 id="action_result" class="result_text">Result:</h3>
         <h3 id="callback_result" class="result_text">Callback result:</h3>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
