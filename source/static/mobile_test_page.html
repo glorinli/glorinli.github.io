@@ -46,12 +46,12 @@
         </style>
         <script>
             function callAndroidWebpageAction(type, data) {
-                var result = window.unityActionHandler.handleWebpageAction(JSON.stringify({"actionType": type, "actionData": data}));
+                var result = window.unityActionHandler.handleWebpageAction(JSON.stringify({actionType: type, actionData: data}));
                 document.getElementById('action_result').innerHTML = "Android Result: " + result;
             }
 
             function calliOSWebpageAction(type, data) {
-                var result = window.webkit.messageHandlers.handleWebpageAction.postMessage(JSON.stringify({"actionType": type, "actionData": data}));
+                var result = window.webkit.messageHandlers.handleWebpageAction.postMessage(JSON.stringify({actionType: type, actionData: data}));
                 document.getElementById('action_result').innerText = "iOS Result: " + result;
             }
 
