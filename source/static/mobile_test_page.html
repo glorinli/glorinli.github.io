@@ -62,8 +62,14 @@
         <h2 class="section_header">Actions:</h2>
         <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="callAndroidWebpageAction('pendo', '1234567890');"/>
         <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="calliOSWebpageAction('pendo', '1234567890');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (Android)" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
-        <input class="action_button" type="button" value="Trigger Deeplink (iOS)" onclick="calliOSWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): glip://r/message" onclick="callAndroidWebpageAction('cta', 'glip\://r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): r/message" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): guides?id=10006&path=r/message" onclick="callAndroidWebpageAction('cta', 'guides?id=10006&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): guides?id=10005&path=r/message" onclick="callAndroidWebpageAction('cta', 'guides?id=10005&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): glip://r/message" onclick="calliOSWebpageAction('cta', 'glip\://r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): r/message" onclick="calliOSWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): guides?id=10006&path=r/message" onclick="calliOSWebpageAction('cta', 'guides?id=10006&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): guides?id=10005&path=r/message" onclick="calliOSWebpageAction('cta', 'guides?id=10005&path=r/message');"/>
         <h3 id="callback_result" class="result_text">Callback result:</h3>
         <h2 class="section_header">Exit buttons:</h2>
         <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
