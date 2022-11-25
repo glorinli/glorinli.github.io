@@ -1,0 +1,42 @@
+.action_button {
+    background-color: #066FAC;
+    width: calc(100% - 20px);
+    height: 60px;
+    color: white;
+    border-width: 1px;
+    box-sizing: border-box;
+    margin: 10px;
+    border-color: gray;
+    border-radius: 10px;
+    font-size: large;
+    white-space: normal;
+}
+.exit_button {
+    background-color: #FF8800;
+    width: calc(100% - 20px);
+    height: 60px;
+    border-width: 1px;
+    box-sizing: border-box;
+    margin: 10px;
+    border-color: gray;
+    border-radius: 10px;
+    font-size: large;
+}
+.link {
+    background-color: #46BE59;
+    width: calc(100% - 20px);
+    height: 30px;
+    line-height: 30px;
+    border-width: 1px;
+    box-sizing: border-box;
+    margin: 10px;
+    text-align: center;
+    border-color: gray;
+    border-radius: 10px;
+}
+.section_header {
+    margin: 10px;
+}
+.result_text {
+    margin: 10px;
+}
