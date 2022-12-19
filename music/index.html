@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0" />
+  <title>瞎哼哼</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aplayer@1.10.0/dist/APlayer.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/aplayer@1.10.0/dist/APlayer.min.js"></script>
+  <style>
+    body {
+      text-rendering: auto;
+      background-color: burlywood;
+    }
+  </style>
+</head>
+
+<body>
+  <div id="app">
+    <div id="aplayer"></div>
+  </div>
+
+  <script>
+    const ap = new APlayer({
+      container: document.getElementById('aplayer'),
+      theme: '#0083ff',
+      lrcType: 0,
+      mini: false,
+      autoplay: false,
+      loop: 'all',
+      preload: 'auto',
+      mutex: true,
+      listFolded: false,
+      listMaxHeight: 90,
+      audio: [{
+        name: '最美的期待',
+        artist: 'G',
+        url: 'music/zmdqd.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },{
+        name: '九月',
+        artist: 'G',
+        url: 'music/jy.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },{
+        name: '送别',
+        artist: 'G',
+        url: 'music/songbie.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },{
+        name: '外婆的澎湖湾',
+        artist: 'G',
+        url: 'music/wpdphw.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },
+      {
+        name: '洋埔园',
+        artist: 'Frogs',
+        url: 'music/洋埔园.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },
+      {
+        name: '晴天前奏',
+        artist: 'G',
+        url: 'music/qingtianqianzou.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },
+      {
+        name: '凤凰花开的路口',
+        artist: 'G',
+        url: 'music/fhhkdlk.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      },
+      {
+        name: '遥远的歌',
+        artist: 'G',
+        url: 'music/yydg.m4a',
+        cover: 'images/avatar.jpg',
+        theme: '#ebd0c2'
+      }]
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" href="./style.css" />
+        <script>
+            function callAndroidWebpageAction(type, data) {
+                window.unityActionHandler.handleWebpageAction(JSON.stringify({actionType: type, actionData: data}));
+            }
+
+            function calliOSWebpageAction(type, data) {
+                window.webkit.messageHandlers.handleWebpageAction.postMessage(JSON.stringify({actionType: type, actionData: data}));
+            }
+
+            function unityWebpageCallback(type, result) {
+                document.getElementById("callback_result").innerText = "Call back with type " + type + " and result " + result;
+            }
+        </script>
+    </head>
+    <body>
+        <h2 class="section_header">Actions:</h2>
+        <input class="action_button" type="button" value="Trigger Pendo event (Android)" onclick="callAndroidWebpageAction('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Pendo event  (iOS)" onclick="calliOSWebpageAction('pendo', '1234567890');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): glip://r/message" onclick="callAndroidWebpageAction('cta', 'glip\://r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): r/message" onclick="callAndroidWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): guides?id=10006&path=r/message" onclick="callAndroidWebpageAction('cta', 'guides?id=10006&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (Android): guides?id=10005&path=r/message" onclick="callAndroidWebpageAction('cta', 'guides?id=10005&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): glip://r/message" onclick="calliOSWebpageAction('cta', 'glip\://r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): r/message" onclick="calliOSWebpageAction('cta', 'r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): guides?id=10006&path=r/message" onclick="calliOSWebpageAction('cta', 'guides?id=10006&path=r/message');"/>
+        <input class="action_button" type="button" value="Trigger Deeplink (iOS): guides?id=10005&path=r/message" onclick="calliOSWebpageAction('cta', 'guides?id=10005&path=r/message');"/>
+        <h3 id="callback_result" class="result_text">Callback result:</h3>
+        <h2 class="section_header">Exit buttons:</h2>
+        <input class="exit_button" type="button" value="Exit page (Android)" onclick="window.RCHelpArticle.exit();"/>
+        <input class="exit_button" type="button" value="Exit page (iOS)" onclick="window.webkit.messageHandlers.exit.postMessage(null);"/>
+        <h2 class="section_header">Web links:</h2>
+        <div class="link"><a href="https://www.baidu.com/" target="_blank">Link with target blank</a></div>
+        <div class="link"><a href="https://www.baidu.com/">Link without target blank</a></div>
+        <h2 class="section_header">Deep links:</h2>
+        <div class="link"><a href="glip://r/message">glip://r/message</a></div>
+        <div class="link"><a href="glip://r/message" target="_blank">glip://r/message (target = _blank)</a></div>
+        <div class="link"><a href="glip://r/dialer?number=123">glip://r/dialer?number=123</a></div>
+        <div class="link"><a href="glip://r/glipmessage?type=new&email='a@a.com'">glip://r/glipmessage?type=new&email="a@a.com"</a></div>
+    </body>
+</html>
