@@ -131,6 +131,11 @@
                                         "params": {
                                         },
                                         "referenceParams": [
+                                            {
+                                                "name": "headers.xrc-etm-subscription-id",
+                                                "reference": "session.xRcEtmSubscriptionId",
+                                                "optional": true
+                                            }
                                         ],
                                         "id": "outlook_listMessages",
                                         "disabled": null
