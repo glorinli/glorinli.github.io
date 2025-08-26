@@ -125,6 +125,15 @@
                                         },
                                         "id": "rio_avaRetrieve",
                                         "disabled": null
+                                    },
+                                    {
+                                        "type": "Integration",
+                                        "params": {
+                                        },
+                                        "referenceParams": [
+                                        ],
+                                        "id": "outlook_listMessages",
+                                        "disabled": null
                                     }
                                 ],
                                 "disabled": null
