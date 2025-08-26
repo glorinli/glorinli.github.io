@@ -132,8 +132,8 @@
                                         },
                                         "referenceParams": [
                                             {
-                                                "name": "headers.xrc-etm-subscription-id",
-                                                "reference": "session.xRcEtmSubscriptionId",
+                                                "name": "headers.XRC-ETM-Subscriber-ID",
+                                                "reference": "session.xRcEtmSubscriberId",
                                                 "optional": true
                                             }
                                         ],
