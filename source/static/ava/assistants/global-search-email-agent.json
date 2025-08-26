@@ -136,9 +136,9 @@
                     "lastModifiedTime": "2025-08-19T09:22:16.995419Z"
                 },
                 {
-                    "id": "4018",
+                    "id": "4019",
                     "type": "DynamicAction",
-                    "name": "Personal Assistant Agent",
+                    "name": "Personal Email Agent",
                     "config": {
                         "type": "DynamicAction",
                         "tasks": [
