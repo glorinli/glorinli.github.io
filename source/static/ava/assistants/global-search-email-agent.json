@@ -149,7 +149,6 @@
                                     {
                                         "type": "Integration",
                                         "params": {
-                                            "Prefer": "outlook.body-content-type=text"
                                         },
                                         "referenceParams": [
                                             {
@@ -173,6 +172,7 @@
                                     {
                                         "type": "Integration",
                                         "params": {
+                                            "Prefer": "outlook.body-content-type=text"
                                         },
                                         "referenceParams": [
                                             {
