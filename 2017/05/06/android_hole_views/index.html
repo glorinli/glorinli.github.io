@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Android】如何在View中绘制一个“洞” | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,View">
+    <meta name="description" content="有时，我们需要在界面上绘制一个”洞“，如进行图片裁剪的时候，需要显示一个裁剪的范围，如图：                                                                                              图片裁剪               下面介绍几种实现方法，以在一个View中间画一个圆洞为例 1. 直接绘制外部最直观的">
+<meta name="keywords" content="Android,View">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】如何在View中绘制一个“洞”">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2017&#x2F;05&#x2F;06&#x2F;android_hole_views&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="有时，我们需要在界面上绘制一个”洞“，如进行图片裁剪的时候，需要显示一个裁剪的范围，如图：                                                                                              图片裁剪               下面介绍几种实现方法，以在一个View中间画一个圆洞为例 1. 直接绘制外部最直观的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;imgs&#x2F;hole_views_crop.jpg">
+<meta property="og:image" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;imgs&#x2F;hole_views_result.jpg">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;imgs&#x2F;hole_views_crop.jpg">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Android】如何在View中绘制一个“洞”</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Android】如何在View中绘制一个“洞”</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-05-06T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2017-05-07
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-直接绘制外部"><span class="post-toc-number">1.</span> <span class="post-toc-text">1. 直接绘制外部</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-Path-DIFFERENCE-操作"><span class="post-toc-number">2.</span> <span class="post-toc-text">2. Path DIFFERENCE 操作</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-PATH-EVEN-ODD"><span class="post-toc-number">3.</span> <span class="post-toc-text">3. PATH EVEN_ODD</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-XferMode"><span class="post-toc-number">4.</span> <span class="post-toc-text">4. XferMode</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行效果"><span class="post-toc-number">5.</span> <span class="post-toc-text">运行效果</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-android_hole_views"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Android】如何在View中绘制一个“洞”</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-05-07 00:00:00" datetime="2017-05-06T16:00:00.000Z"  itemprop="datePublished">2017-05-07</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>有时，我们需要在界面上绘制一个”洞“，如进行图片裁剪的时候，需要显示一个裁剪的范围，如图：</p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/hole_views_crop.jpg" alt="图片裁剪" title="">
+                </div>
+                <div class="image-caption">图片裁剪</div>
+            </figure>
+
+<p>下面介绍几种实现方法，以在一个View中间画一个圆洞为例</p>
+<h2 id="1-直接绘制外部"><a href="#1-直接绘制外部" class="headerlink" title="1. 直接绘制外部"></a>1. 直接绘制外部</h2><p>最直观的方法，用一个Path填充”圆洞”的外部</p>
+<p>关键代码如下：</p>
+<p>在Size变化的时候，计算Path</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算中间圆 mCircleRect</span></span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line">mOutsidePath.reset();</span><br><span class="line"></span><br><span class="line"><span class="comment">// Move到顶端中点</span></span><br><span class="line">mOutsidePath.moveTo(centerX, <span class="number">0</span>);</span><br><span class="line">mOutsidePath.lineTo(centerX, centerY);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加一个圆</span></span><br><span class="line">mOutsidePath.addArc(mCircleRect, <span class="number">270</span>, <span class="number">360</span>);</span><br><span class="line">mOutsidePath.lineTo(centerX, <span class="number">0</span>);</span><br><span class="line">mOutsidePath.lineTo(<span class="number">0</span>, <span class="number">0</span>);</span><br><span class="line">mOutsidePath.lineTo(<span class="number">0</span>, h);</span><br><span class="line">mOutsidePath.lineTo(w, h);</span><br><span class="line">mOutsidePath.lineTo(w, <span class="number">0</span>);</span><br><span class="line">mOutsidePath.lineTo(centerX, <span class="number">0</span>);</span><br><span class="line">mOutsidePath.close();</span><br></pre></td></tr></table></figure>
+
+<p>onDraw的时候，直接绘制</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line"></span><br><span class="line">    mPaint.setColor(mOutsideColor);</span><br><span class="line">    mPaint.setStyle(Paint.Style.FILL);</span><br><span class="line">    canvas.drawPath(mOutsidePath, mPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>这样，通过绘制圆的外部区域，就实现了一个圆洞</p>
+<h2 id="2-Path-DIFFERENCE-操作"><a href="#2-Path-DIFFERENCE-操作" class="headerlink" title="2. Path DIFFERENCE 操作"></a>2. Path DIFFERENCE 操作</h2><p>通过</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Path.op(Path p, Op op)</span><br></pre></td></tr></table></figure>
+<p>可以进行Path的相应操作，其中DIFFERENCE可以进行“减”操作：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 计算中间圆 mCircleRect</span></span><br><span class="line"><span class="comment">// ......</span></span><br><span class="line"></span><br><span class="line">mCirclePath.reset();</span><br><span class="line">mCirclePath.addOval(mCircleRect, Path.Direction.CW);</span><br><span class="line">mCirclePath.close();</span><br><span class="line"></span><br><span class="line">mFillPath.reset();</span><br><span class="line">mFillPath.addRect(<span class="number">0</span>, <span class="number">0</span>, w, h, Path.Direction.CW);</span><br><span class="line">mFillPath.close();</span><br><span class="line"></span><br><span class="line"><span class="comment">// isInEditMode是因为IDE还不支持Path.op操作</span></span><br><span class="line"><span class="keyword">if</span> (!isInEditMode())</span><br><span class="line">    mFillPath.op(mCirclePath, Path.Op.DIFFERENCE);</span><br></pre></td></tr></table></figure>
+
+<p>由一个大的Path，减去一个圆的Path，也就得到了一个”洞”</p>
+<h2 id="3-PATH-EVEN-ODD"><a href="#3-PATH-EVEN-ODD" class="headerlink" title="3. PATH EVEN_ODD"></a>3. PATH EVEN_ODD</h2><p>此方法与方法2类似，只是将op操作替换为：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mFillPath.addPath(mCirclePath);</span><br><span class="line">mFillPath.setFillType(Path.FillType.EVEN_ODD);</span><br></pre></td></tr></table></figure>
+
+<p>Path的FillType还有WINDING, REVERSE_WINDING, REVERSE_EVEN_ODD等，其中的区别可自行研究。</p>
+<p><strong>此方法需要API19以上才支持</strong></p>
+<h2 id="4-XferMode"><a href="#4-XferMode" class="headerlink" title="4. XferMode"></a>4. XferMode</h2><p>XferMode是一个神奇的玩意儿，可以大致理解为“混合”模式<br>使用XferMode的Clear Mode，可以将界面上相应的区域”清除”，因此也是可以用来绘制“洞”的，关键代码如下</p>
+<p>在初始化的时候，设置Hardware Accelerate</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">private</span> <span class="keyword">void</span> <span class="title">initView</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    mPaint = <span class="keyword">new</span> Paint(Paint.ANTI_ALIAS_FLAG);</span><br><span class="line">    mCircleRect = <span class="keyword">new</span> RectF();</span><br><span class="line">    mCirclePath = <span class="keyword">new</span> Path();</span><br><span class="line">    mFillPath = <span class="keyword">new</span> Path();</span><br><span class="line">    mClearMode = <span class="keyword">new</span> PorterDuffXfermode(PorterDuff.Mode.CLEAR);</span><br><span class="line"></span><br><span class="line">    setLayerType(View.LAYER_TYPE_HARDWARE, mPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>在绘制的时候，使用XferMode</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Override</span></span><br><span class="line"><span class="function"><span class="keyword">protected</span> <span class="keyword">void</span> <span class="title">onDraw</span><span class="params">(Canvas canvas)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">super</span>.onDraw(canvas);</span><br><span class="line"></span><br><span class="line">    canvas.drawColor(mOutsideColor);</span><br><span class="line"></span><br><span class="line">    mPaint.setXfermode(mClearMode);</span><br><span class="line">    mPaint.setColor(Color.TRANSPARENT);</span><br><span class="line">    mPaint.setStyle(Paint.Style.FILL);</span><br><span class="line">    canvas.drawPath(mCirclePath, mPaint);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>记得不要在onDraw方法里面去创建对象。</p>
+<p><strong>此方法需要支持硬件加速</strong></p>
+<h2 id="运行效果"><a href="#运行效果" class="headerlink" title="运行效果"></a>运行效果</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/hole_views_result.jpg" alt="运行效果" title="">
+                </div>
+                <div class="image-caption">运行效果</div>
+            </figure>
+
+<p>具体代码见github: <a href="https://github.com/dogold/andemos/tree/master/widgets/src/main/java/com/dogold/andemos/widgets/customwidgets/holeviews" target="_blank" rel="noopener">Github</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.076Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2017/05/06/android_hole_views/" target="_blank" rel="external">https://glorin.xyz/2017/05/06/android_hole_views/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/view/" rel="tag">View</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2017/05/06/android_hole_views/&title=《【Android】如何在View中绘制一个“洞”》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2017/05/06/android_hole_views/&title=《【Android】如何在View中绘制一个“洞”》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2017/05/06/android_hole_views/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】如何在View中绘制一个“洞”》 — Glorin&url=https://glorin.xyz/2017/05/06/android_hole_views/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2017/05/06/android_hole_views/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2017/05/15/android_libproject_so/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">【Android】关于Library Project中so库打包的问题</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2017/04/26/article_collect_android/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">优秀技术文章收藏 - Android篇</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2017/05/06/android_hole_views/&title=《【Android】如何在View中绘制一个“洞”》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2017/05/06/android_hole_views/&title=《【Android】如何在View中绘制一个“洞”》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2017/05/06/android_hole_views/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】如何在View中绘制一个“洞”》 — Glorin&url=https://glorin.xyz/2017/05/06/android_hole_views/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2017/05/06/android_hole_views/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2017/05/06/android_hole_views/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

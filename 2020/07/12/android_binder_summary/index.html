@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Android】Android Binder 总结 | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,Binder">
+    <meta name="description" content="通过最近对Binder的源码阅读，以及拜读了各路大神的文章后，再次对自己的理解做一个小小的记录。 Binder 是什么Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBinder，Binder 是 Android 系统最重要的组件之一，也是整个系统的基石。同时，Binder 也是一个系统设备 &#x2F;dev&#x2F;binder 对应的是 Binder 驱动，是 Binder 的">
+<meta name="keywords" content="Android,Binder">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】Android Binder 总结">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2020&#x2F;07&#x2F;12&#x2F;android_binder_summary&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="通过最近对Binder的源码阅读，以及拜读了各路大神的文章后，再次对自己的理解做一个小小的记录。 Binder 是什么Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBinder，Binder 是 Android 系统最重要的组件之一，也是整个系统的基石。同时，Binder 也是一个系统设备 &#x2F;dev&#x2F;binder 对应的是 Binder 驱动，是 Binder 的">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.076Z">
+<meta name="twitter:card" content="summary">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Android】Android Binder 总结</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Android】Android Binder 总结</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-07-12T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2020-07-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binder-是什么"><span class="post-toc-number">1.</span> <span class="post-toc-text">Binder 是什么</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Linux-常见的进程间通信方式及特点"><span class="post-toc-number">2.</span> <span class="post-toc-text">Linux 常见的进程间通信方式及特点</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#共享内存"><span class="post-toc-number">2.1.</span> <span class="post-toc-text">共享内存</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#信号量"><span class="post-toc-number">2.2.</span> <span class="post-toc-text">信号量</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Socket"><span class="post-toc-number">2.3.</span> <span class="post-toc-text">Socket</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#文件共享"><span class="post-toc-number">2.4.</span> <span class="post-toc-text">文件共享</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#为什么采用-Binder"><span class="post-toc-number">3.</span> <span class="post-toc-text">为什么采用 Binder</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binder-主要概念"><span class="post-toc-number">4.</span> <span class="post-toc-text">Binder 主要概念</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IBinder"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">IBinder</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IInterface"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">IInterface</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Parcel"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">Parcel</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Binder"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">Binder</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BinderInternal"><span class="post-toc-number">4.5.</span> <span class="post-toc-text">BinderInternal</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BinderProxy"><span class="post-toc-number">4.6.</span> <span class="post-toc-text">BinderProxy</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BBinder"><span class="post-toc-number">4.7.</span> <span class="post-toc-text">BBinder</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#BpBinder"><span class="post-toc-number">4.8.</span> <span class="post-toc-text">BpBinder</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ProcessState"><span class="post-toc-number">4.9.</span> <span class="post-toc-text">ProcessState</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#IPCThreadState"><span class="post-toc-number">4.10.</span> <span class="post-toc-text">IPCThreadState</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Binder-Driver"><span class="post-toc-number">4.11.</span> <span class="post-toc-text">Binder Driver</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#ServiceManager"><span class="post-toc-number">4.12.</span> <span class="post-toc-text">ServiceManager</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binder-一次拷贝的原理"><span class="post-toc-number">5.</span> <span class="post-toc-text">Binder 一次拷贝的原理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Binder-调用过程"><span class="post-toc-number">6.</span> <span class="post-toc-text">Binder 调用过程</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#客户端"><span class="post-toc-number">6.1.</span> <span class="post-toc-text">客户端</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#服务端"><span class="post-toc-number">6.2.</span> <span class="post-toc-text">服务端</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Java-Binder-和-Native-Binder-联系"><span class="post-toc-number">7.</span> <span class="post-toc-text">Java Binder 和 Native Binder 联系</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实名-Binder，匿名-Binder-区别与联系"><span class="post-toc-number">8.</span> <span class="post-toc-text">实名 Binder，匿名 Binder 区别与联系</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#参考"><span class="post-toc-number">9.</span> <span class="post-toc-text">参考</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-android_binder_summary"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Android】Android Binder 总结</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-07-13 00:00:00" datetime="2020-07-12T16:00:00.000Z"  itemprop="datePublished">2020-07-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>通过最近对Binder的源码阅读，以及拜读了各路大神的文章后，再次对自己的理解做一个小小的记录。</p>
+<h2 id="Binder-是什么"><a href="#Binder-是什么" class="headerlink" title="Binder 是什么"></a>Binder 是什么</h2><p>Binder 是 Android 系统中的一中进程间通信的机制，前身是 OpenBinder，Binder 是 Android 系统最重要的组件之一，也是整个系统的基石。<br>同时，Binder 也是一个系统设备 /dev/binder 对应的是 Binder 驱动，是 Binder 的核心。<br>从实现机制上来说，Binder是一个token，用来标识一个服务，这个token可以跨进程地传递，拿到binder对象，就可以发起远程访问。</p>
+<h2 id="Linux-常见的进程间通信方式及特点"><a href="#Linux-常见的进程间通信方式及特点" class="headerlink" title="Linux 常见的进程间通信方式及特点"></a>Linux 常见的进程间通信方式及特点</h2><h3 id="共享内存"><a href="#共享内存" class="headerlink" title="共享内存"></a>共享内存</h3><p>无需拷贝<br>逻辑复杂，需要应用程序处理进程间数据同步</p>
+<h3 id="信号量"><a href="#信号量" class="headerlink" title="信号量"></a>信号量</h3><p>适合事件通知，不适合传递大量数据</p>
+<h3 id="Socket"><a href="#Socket" class="headerlink" title="Socket"></a>Socket</h3><p>速度慢，两次拷贝，适合低速通信，或跨设备通信</p>
+<h3 id="文件共享"><a href="#文件共享" class="headerlink" title="文件共享"></a>文件共享</h3><p>速度慢，同步状态难以维护</p>
+<h2 id="为什么采用-Binder"><a href="#为什么采用-Binder" class="headerlink" title="为什么采用 Binder"></a>为什么采用 Binder</h2><ul>
+<li>效率高，仅需一次拷贝</li>
+<li>封装完善，由系统统一管理进程间的数据同步、线程池管理等等，使用方便</li>
+<li>语法简洁，可以以同步的方式完成ipc通信，使程序逻辑更简单</li>
+<li>支持 Java 层，Native 层</li>
+<li>由系统统一处理uid，方便进行权限控制，安全性高</li>
+<li>AIDL 工具支持直接生成Binder代码，方便使用</li>
+</ul>
+<h2 id="Binder-主要概念"><a href="#Binder-主要概念" class="headerlink" title="Binder 主要概念"></a>Binder 主要概念</h2><h3 id="IBinder"><a href="#IBinder" class="headerlink" title="IBinder"></a>IBinder</h3><p>代表一个可以远程访问的对象，所谓远程访问，就是跨进程访问。<br>IBinder主要有几个方法：</p>
+<ul>
+<li>getInterfaceDescriptor(): 获取这个对象的名称</li>
+<li>pingBinder(): 检查这个对象是否还存在</li>
+<li>isBinderAlive()：检查提供这个Binder对象的进程是否还存活</li>
+<li>queryLocalInterface(@NonNull String descriptor): 查询本地接口，对于同进程使用 Binder，这个方法会直接返回 Binder 的实现类，对于跨进程的场景，这个方法返回 null</li>
+<li>transact(int code, @NonNull Parcel data, @Nullable Parcel reply, int flags): Binde r的核心方法，用来向远程服务发送数据</li>
+<li>linkToDeath: 死亡监听<h3 id="IInterface"><a href="#IInterface" class="headerlink" title="IInterface"></a>IInterface</h3>Binder服务的基础接口，只有一个方法：asBinder，用来获取对应的Binder对象。IInterface 主要是用来作为服务端和客户端的一个协议规范，即服务端实现相应的方法，客户端来调用，这个规范就是一个IInterface。<h3 id="Parcel"><a href="#Parcel" class="headerlink" title="Parcel"></a>Parcel</h3>Parcel 是一个支持数据序列化的组件，我们知道，在进程间传递消息，由于进程间对象、类型都不共用，因此必须序列化成通用的数据，才能进行传递，Parcel就是用来做这个事情的，我们常用的Parcelable，就是基于Parcel实现的。在 binder transact 过程中使用。<h3 id="Binder"><a href="#Binder" class="headerlink" title="Binder"></a>Binder</h3>这里我们说的是Java层的Binder类，这个类是IBinder的一个基本实现，实现了 Binder 的本地调用（同进程），即 transact 方法直接调用 onTransact 方法，也是在这里引入了 onTransact方法，我们在使用 AIDL 的时候，Stub 类就是 Binder 的子类。<br>对于 Native 层的 Binder，作用也是一样的，只不过是 Native 的实现，用来给 Native 代码使用。<h3 id="BinderInternal"><a href="#BinderInternal" class="headerlink" title="BinderInternal"></a>BinderInternal</h3>这里提供一些 Binder 的内部 API（不给app使用的），常见的比如：<br>joinThreadPool: 将调用线程加入Binder线程池<br>getContextObject: 获取系统的“全局上下文”（Global Context），其实就是 0 号 Binder，也就是 ServiceManager，这个方法在 ServiceManager 的 getIServiceManager 方法里面有使用到，就是用来获取 ServiceManager 的 Binder 对象，这个后续 ServiceManager 中会介绍。<br>setMaxThreads:<h3 id="BinderProxy"><a href="#BinderProxy" class="headerlink" title="BinderProxy"></a>BinderProxy</h3>很重要的一个类，是 Java 层对 Native Binder 的一个代理，由于 Binder 的主要实现在 Native 层，如果 Java 层要使用，就要通过这个 BinderProxy，这个类的对象是由 Native 的 javaObjectforIBinder 方法创建的，在 Java 层，不会创建这个对象。<br>BinderProxy 主要是定义了一堆的 native 方法，用来实现 Java 层和 Native 层的调用，其中最主要的是 transactNative 方法，这个方法就是 Java 层 transact 的根本所在，也就是走到了 Native 层的 transact 逻辑。<br>对应的 Native 实现，在 android_util_Binder.cpp 这个文件中。<h3 id="BBinder"><a href="#BBinder" class="headerlink" title="BBinder"></a>BBinder</h3>BBinder 就是 Binder 的 Native 实现，也就是说，这个是在提供服务的地方创建的，用来处理 Binde r的逻辑，这个在上面 Binder 的地方有提到过了。<h3 id="BpBinder"><a href="#BpBinder" class="headerlink" title="BpBinder"></a>BpBinder</h3>BpBinder  是 Native 层最重要的类之一，我们知道，Binder 是一中 C/S 架构，而 BpBinder 就是 Client 端真正做事的那个人，不管是 Java 的 BinderProxy，还是直接 Native 使用 Binder，最终发送和接收数据的就是 BpBinder，transact 最终的实现就是在这里，BpBinder 调用 IPCThreadState，实现 IPC 请求，和结果的监听。可以看看 transact 方法的代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">status_t</span> BpBinder::transact(</span><br><span class="line">    <span class="keyword">uint32_t</span> code, <span class="keyword">const</span> Parcel&amp; data, Parcel* reply, <span class="keyword">uint32_t</span> flags)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="comment">// Once a binder has died, it will never come back to life.</span></span><br><span class="line">    <span class="keyword">if</span> (mAlive) &#123;</span><br><span class="line">        <span class="keyword">status_t</span> status = IPCThreadState::self()-&gt;transact(</span><br><span class="line">            mHandle, code, data, reply, flags);</span><br><span class="line">        <span class="keyword">if</span> (status == DEAD_OBJECT) mAlive = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span> status;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">return</span> DEAD_OBJECT;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="ProcessState"><a href="#ProcessState" class="headerlink" title="ProcessState"></a>ProcessState</h3>这个是 Binder 环境的初始化类，看名字是进程相关的，这个类是单例的，在创建的时候，会打开 Binder 驱动，并完成和 Binder 驱动的关系的建立，也就是通过 mmap 来做一个内存映射，这样 Binder 驱动就可以对这个进程发送 transact 数据。<h3 id="IPCThreadState"><a href="#IPCThreadState" class="headerlink" title="IPCThreadState"></a>IPCThreadState</h3>这个是 Binder 线程相关的，最终和 Binder 驱动交换数据的工作是由它来完成的。<h3 id="Binder-Driver"><a href="#Binder-Driver" class="headerlink" title="Binder Driver"></a>Binder Driver</h3>Binder 驱动，Binder 通信机制的核心，主要的工作就是</li>
+</ul>
+<ol>
+<li>维护进程间的 binder 对象，保存引用</li>
+<li>在进程间传递消息<h3 id="ServiceManager"><a href="#ServiceManager" class="headerlink" title="ServiceManager"></a>ServiceManager</h3>ServiceManager 是一个管理器，可以理解为 binder 服务的一个管理处，主要是两个作用：</li>
+<li>注册服务</li>
+<li>获取服务</li>
+</ol>
+<p>对于比如 ActivityManagerService、WindowManagerService 等系统服务，都是有在 ServiceManager 中注册过的，因此他们叫做“实名Binder”，而未注册的就叫“匿名Binder”<br>有一种说法很形象，Binder 作为一个 C/S 架构的通信机制，binder 就是 每个服务的 IP 和端口，而 ServiceManager 就是一个 DNS 服务器，将 名称 映射到对应的binder，方便客户端通过名称访问服务。</p>
+<h2 id="Binder-一次拷贝的原理"><a href="#Binder-一次拷贝的原理" class="headerlink" title="Binder 一次拷贝的原理"></a>Binder 一次拷贝的原理</h2><p>最根本的就是使用了mmap进行了内存的映射，上面有提到，在ProcessState初始化的时候，会进行一个mmap，这是服务端进程（用户空间）到binder驱动（内核空间）的一个映射，而在binder驱动内部，也采用mmap对不同进程的缓冲区做了mmap，于是就相当于从客户端的内核空间的一块内存，直接映射到了服务端的用户空间的一块内存，因此只需要从客户端拷贝一次数据到内核空间，数据就会自动到达服务端的用户空间，这就是只需要一次拷贝的原因。</p>
+<p>具体可参考此文章：<a href="https://blog.csdn.net/AndroidStudyDay/article/details/93749470" target="_blank" rel="noopener">https://blog.csdn.net/AndroidStudyDay/article/details/93749470</a></p>
+<h2 id="Binder-调用过程"><a href="#Binder-调用过程" class="headerlink" title="Binder 调用过程"></a>Binder 调用过程</h2><p>这个问题要区分客户端和服务端</p>
+<h3 id="客户端"><a href="#客户端" class="headerlink" title="客户端"></a>客户端</h3><p>对于客户端，调用过程如下: 业务方法 -&gt; BinderProxy.transact -&gt; BpBinder.transact -&gt; IPCThreadState.transact -&gt; talkWithDriver -&gt; binder_ioctl (驱动部分省略)</p>
+<h3 id="服务端"><a href="#服务端" class="headerlink" title="服务端"></a>服务端</h3><p>对于服务端，主要是Binder线程不停地轮询，调用IPCThreadState.getAndExcuteCommand -&gt; talkWithDriver -&gt; binder_ioctl -&gt; executeCommand -&gt; BBinder.transact -&gt; BBinder.onTransact<br>而 BBinder 是怎么调用到Java层的Binder对象的方法呢，秘密在android_util_Binder的JavaBBinder中：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">char</span>* <span class="keyword">const</span> kBinderPathName = <span class="string">"android/os/Binder"</span>;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">static</span> <span class="keyword">int</span> <span class="title">int_register_android_os_Binder</span><span class="params">(JNIEnv* env)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    jclass clazz = FindClassOrDie(env, kBinderPathName);</span><br><span class="line">    ...</span><br><span class="line">    gBinderOffsets.mExecTransact = GetMethodIDOrDie(env, clazz, <span class="string">"execTransact"</span>, <span class="string">"(IJJI)Z"</span>);</span><br><span class="line">    ...</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>也就是说是通过这边，实现Native到Java层的调用的。</p>
+<p>所以服务端的完整流程是: IPCThreadState.getAndExcuteCommand -&gt; talkWithDriver -&gt; binder_ioctl -&gt; executeCommand -&gt; BBinder.transact -&gt; BBinder.onTransact -&gt; JavaBBinder.onTransact -&gt; Binder.execTrasact -&gt; Binder.onTransact</p>
+<h2 id="Java-Binder-和-Native-Binder-联系"><a href="#Java-Binder-和-Native-Binder-联系" class="headerlink" title="Java Binder 和 Native Binder 联系"></a>Java Binder 和 Native Binder 联系</h2><p>Java Binder 是对 Native Binder的封装，方便Java 层使用，两者交互的逻辑主要在 android_util_Binder.cpp 中。</p>
+<h2 id="实名-Binder，匿名-Binder-区别与联系"><a href="#实名-Binder，匿名-Binder-区别与联系" class="headerlink" title="实名 Binder，匿名 Binder 区别与联系"></a>实名 Binder，匿名 Binder 区别与联系</h2><p>上面有提到过，在ServiceManager中登记过的，就叫实名Binder，其他的叫匿名Binder，对于匿名Binder，需要有实名Binder作为媒介，才能建立通信，否则Binder无法在进程间传递。</p>
+<h2 id="参考"><a href="#参考" class="headerlink" title="参考"></a>参考</h2><p><a href="http://gityuan.com/2016/09/04/binder-start-service/" target="_blank" rel="noopener">http://gityuan.com/2016/09/04/binder-start-service/</a><br><a href="https://blog.csdn.net/universus/article/details/6211589" target="_blank" rel="noopener">https://blog.csdn.net/universus/article/details/6211589</a><br><a href="https://blog.csdn.net/AndroidStudyDay/article/details/93749470" target="_blank" rel="noopener">https://blog.csdn.net/AndroidStudyDay/article/details/93749470</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.076Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2020/07/12/android_binder_summary/" target="_blank" rel="external">https://glorin.xyz/2020/07/12/android_binder_summary/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Binder/" rel="tag">Binder</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/07/12/android_binder_summary/&title=《【Android】Android Binder 总结》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/07/12/android_binder_summary/&title=《【Android】Android Binder 总结》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/07/12/android_binder_summary/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】Android Binder 总结》 — Glorin&url=https://glorin.xyz/2020/07/12/android_binder_summary/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/07/12/android_binder_summary/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/07/26/android_activity_launching/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">【Android】Android Activity 启动流程简析(基于Android 10 代码)</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/06/22/android_default_threads/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">【Android】Android App 默认有哪些线程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/07/12/android_binder_summary/&title=《【Android】Android Binder 总结》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/07/12/android_binder_summary/&title=《【Android】Android Binder 总结》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/07/12/android_binder_summary/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】Android Binder 总结》 — Glorin&url=https://glorin.xyz/2020/07/12/android_binder_summary/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/07/12/android_binder_summary/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2020/07/12/android_binder_summary/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

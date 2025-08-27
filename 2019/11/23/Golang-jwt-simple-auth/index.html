@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Golang】Golang + jwt 实现简易用户认证 | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Golang,Jwt,Auth">
+    <meta name="description" content="前言在开发app的时候，难免会需要有后台API，Golang是一门非常适合开发后台服务的高性能的语言。在使用Golang开发后台API的时候，经常需要有用户注册、登录的功能，例如为了保存用户数据、为了给不同用户提供不同服务等。本文便是介绍一种基于jwt的Golang的用户认证系统。 目标我们的模板是实现三个API接口：  &#x2F;api&#x2F;account: 支持Post方法，用来注册一个用户 &#x2F;api&#x2F;a">
+<meta name="keywords" content="Golang,Jwt,Auth">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Golang】Golang + jwt 实现简易用户认证">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2019&#x2F;11&#x2F;23&#x2F;Golang-jwt-simple-auth&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="前言在开发app的时候，难免会需要有后台API，Golang是一门非常适合开发后台服务的高性能的语言。在使用Golang开发后台API的时候，经常需要有用户注册、登录的功能，例如为了保存用户数据、为了给不同用户提供不同服务等。本文便是介绍一种基于jwt的Golang的用户认证系统。 目标我们的模板是实现三个API接口：  &#x2F;api&#x2F;account: 支持Post方法，用来注册一个用户 &#x2F;api&#x2F;a">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.075Z">
+<meta name="twitter:card" content="summary">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Golang】Golang + jwt 实现简易用户认证</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Golang】Golang + jwt 实现简易用户认证</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2019-11-23T02:25:55.000Z" itemprop="datePublished" class="page-time">
+  2019-11-23
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Golang/">Golang</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#前言"><span class="post-toc-number">1.</span> <span class="post-toc-text">前言</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#目标"><span class="post-toc-number">2.</span> <span class="post-toc-text">目标</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#工具原料"><span class="post-toc-number">3.</span> <span class="post-toc-text">工具原料</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#实现步骤"><span class="post-toc-number">4.</span> <span class="post-toc-text">实现步骤</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#搭建http服务，提供API"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">搭建http服务，提供API</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#JWT认证实现"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">JWT认证实现</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#注册功能"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">注册功能</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#登录功能"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">登录功能</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#运行部署"><span class="post-toc-number">5.</span> <span class="post-toc-text">运行部署</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#小结"><span class="post-toc-number">6.</span> <span class="post-toc-text">小结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Golang-jwt-simple-auth"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Golang】Golang + jwt 实现简易用户认证</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2019-11-23 10:25:55" datetime="2019-11-23T02:25:55.000Z"  itemprop="datePublished">2019-11-23</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Golang/">Golang</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发app的时候，难免会需要有后台API，Golang是一门非常适合开发后台服务的高性能的语言。在使用Golang开发后台API的时候，经常需要有用户注册、登录的功能，例如为了保存用户数据、为了给不同用户提供不同服务等。本文便是介绍一种基于jwt的Golang的用户认证系统。</p>
+<h2 id="目标"><a href="#目标" class="headerlink" title="目标"></a>目标</h2><p>我们的模板是实现三个API接口：</p>
+<ul>
+<li>/api/account: 支持Post方法，用来注册一个用户</li>
+<li>/api/account/accesstoken: 登录功能</li>
+<li>/api/account/me: 获取用户信息，具有认证功能，如果没有用户认证信息（token），则获取失败，否则返回当前用户的信息。<h2 id="工具原料"><a href="#工具原料" class="headerlink" title="工具原料"></a>工具原料</h2></li>
+<li>Golang + Goland IDE（非必须，VSCode等等也可以）</li>
+<li>jwt-go：一个go语言的jwt实现</li>
+<li>github.com/gorilla/mux： go语言的一个路由组件，用来提供http路由服务<h2 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h2><h3 id="搭建http服务，提供API"><a href="#搭建http服务，提供API" class="headerlink" title="搭建http服务，提供API"></a>搭建http服务，提供API</h3></li>
+</ul>
+<ol>
+<li>首先我们在自己的go语言目录下建立项目：golang-jwt-simple-auth（名字可自由决定），golang项目一般遵循golang的约定，放在GOPATH（默认是用户目录下的go文件夹）下面，比如我的项目放在github上，那目录就是<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">~/go/src/github.com/glorinli/golang-jwt-simple-auth</span><br></pre></td></tr></table></figure></li>
+<li>新建main.go问，作为程序的主入口，main.go内容如下:<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">"fmt"</span></span><br><span class="line">	<span class="string">"github.com/glorinli/go-jwt-simple-auth/app"</span></span><br><span class="line">	<span class="string">"github.com/glorinli/go-jwt-simple-auth/controllers"</span></span><br><span class="line">	<span class="string">"log"</span></span><br><span class="line">	<span class="string">"net/http"</span></span><br><span class="line">	<span class="string">"os"</span></span><br><span class="line"></span><br><span class="line">	<span class="string">"github.com/gorilla/mux"</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">init</span><span class="params">()</span></span> &#123;</span><br><span class="line">	log.SetPrefix(<span class="string">"simple-auth"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// 新建路由器</span></span><br><span class="line">	router := mux.NewRouter()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册jwt认证的中间件</span></span><br><span class="line">	router.Use(app.JwtAuthentication)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 注册路由</span></span><br><span class="line">	router.HandleFunc(<span class="string">"/api/account"</span>, controllers.CreateUser).Methods(http.MethodPost)</span><br><span class="line">	router.HandleFunc(<span class="string">"/api/account/accesstoken"</span>, controllers.Login).Methods(http.MethodGet)</span><br><span class="line">	router.HandleFunc(<span class="string">"/api/account/me"</span>, controllers.Me).Methods(http.MethodGet)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 获取端口号</span></span><br><span class="line">	port := os.Getenv(<span class="string">"golang-jwt-simple-auth-port"</span>)</span><br><span class="line">	<span class="keyword">if</span> port == <span class="string">""</span> &#123;</span><br><span class="line">		port = <span class="string">"8001"</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">"Port is:"</span>, port)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 开始服务</span></span><br><span class="line">	err := http.ListenAndServe(<span class="string">":"</span>+port, router)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Print(<span class="string">"Fail to start server"</span>, err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+代码的作用在注释中已经说明了，关于mux库的使用，可以参考 <a href="http://www.gorillatoolkit.org/pkg/mux" target="_blank" rel="noopener">http://www.gorillatoolkit.org/pkg/mux</a>, 这里我们只要知道它起到一个路由器的作用，负责把一个api请求映射到一个方法上。</li>
+</ol>
+<p>关键就在于</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.Use(app.JwtAuthentication)</span><br></pre></td></tr></table></figure>
+<p>这相当与注册了一个中间件，也可以理解为拦截器，就是说所有的请求都会先经过这个中间件拦截处理，于是我们便可以在里面处理认证相关 的逻辑了，接下来就来说说这个JwtAuthentication。</p>
+<h3 id="JWT认证实现"><a href="#JWT认证实现" class="headerlink" title="JWT认证实现"></a>JWT认证实现</h3><p>首先还是贴上JwtAuthentication的代码：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> app</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	... 省略</span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> JwtAuthentication = <span class="function"><span class="keyword">func</span><span class="params">(next http.Handler)</span> <span class="title">http</span>.<span class="title">Handler</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> http.HandlerFunc(<span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 只针对这个me接口开启认证</span></span><br><span class="line">		needAuthPaths := []<span class="keyword">string</span>&#123;<span class="string">"/api/account/me"</span>&#125;</span><br><span class="line">		requestPath := r.URL.Path</span><br><span class="line"></span><br><span class="line">		<span class="keyword">var</span> needAuth = <span class="literal">false</span></span><br><span class="line">		<span class="comment">// 判断是否是需要认证的api，省略</span></span><br><span class="line"></span><br><span class="line">        <span class="comment">// 不需要认证，直接走下一步</span></span><br><span class="line">		<span class="keyword">if</span> !needAuth &#123;</span><br><span class="line">			next.ServeHTTP(w, r)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">        <span class="comment">// 从Header读取Token</span></span><br><span class="line">		tokenHeader := r.Header.Get(<span class="string">"Authorization"</span>)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Token is missing</span></span><br><span class="line">		<span class="keyword">if</span> tokenHeader == <span class="string">""</span> &#123;</span><br><span class="line">			sendInvalidTokenResponse(w, <span class="string">"Missing auth token"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		tk := &amp;models.Token&#123;&#125;</span><br><span class="line"></span><br><span class="line">		token, err := jwt.ParseWithClaims(tokenHeader, tk, <span class="function"><span class="keyword">func</span><span class="params">(token *jwt.Token)</span> <span class="params">(<span class="keyword">interface</span>&#123;&#125;, error)</span></span> &#123;</span><br><span class="line">			<span class="keyword">return</span> []<span class="keyword">byte</span>(os.Getenv(<span class="string">"token_password"</span>)), <span class="literal">nil</span></span><br><span class="line">		&#125;)</span><br><span class="line"></span><br><span class="line">		fmt.Println(<span class="string">"Parse token error:"</span>, err)</span><br><span class="line"></span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			sendInvalidTokenResponse(w, <span class="string">"Invalid auth token: "</span>+err.Error())</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Token is invalid</span></span><br><span class="line">		<span class="keyword">if</span> !token.Valid &#123;</span><br><span class="line">			sendInvalidTokenResponse(w, <span class="string">"Token is not valid"</span>)</span><br><span class="line">			<span class="keyword">return</span></span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// Auth ok</span></span><br><span class="line">		fmt.Println(<span class="string">"User:"</span>, tk.UserId)</span><br><span class="line">		ctx := context.WithValue(r.Context(), <span class="string">"user"</span>, tk.UserId)</span><br><span class="line">		r = r.WithContext(ctx)</span><br><span class="line">		next.ServeHTTP(w, r)</span><br><span class="line">	&#125;)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">sendInvalidTokenResponse</span><span class="params">(w http.ResponseWriter, message <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">	response := u.Message(<span class="literal">false</span>, message)</span><br><span class="line">	w.WriteHeader(http.StatusForbidden)</span><br><span class="line">	w.Header().Set(<span class="string">"Content-Type"</span>, <span class="string">"application/json"</span>)</span><br><span class="line">	u.Respond(w, response)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个函数的作用就是解析客户端传递过来的token，将其解析为一个Token对象，Token对象的格式如下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">JWT claims struct</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="keyword">type</span> Token <span class="keyword">struct</span> &#123;</span><br><span class="line">	UserId <span class="keyword">uint</span></span><br><span class="line">	jwt.StandardClaims</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>可以看到，除了jwt标准的数据，我们还添加了一个UserId字段，这是为了方便从Token确定用户的id。从这里我们也可以看出，Jwt Token是可以包含额外信息的。</p>
+<p>关于这个Token是如何生程的，我们下面分析。</p>
+<h3 id="注册功能"><a href="#注册功能" class="headerlink" title="注册功能"></a>注册功能</h3><p>返回去看main.go，我们发现注册接口被绑定到一个函数上：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.HandleFunc(<span class="string">"/api/account"</span>, controllers.CreateUser).Methods(http.MethodPost)</span><br></pre></td></tr></table></figure>
+<p>来看这个CreateUser函数，位于authController.go中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> CreateUser = <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">	account := &amp;models.Account&#123;&#125;</span><br><span class="line"></span><br><span class="line">	err := json.NewDecoder(r.Body).Decode(account)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		utils.Respond(w, utils.Message(<span class="literal">false</span>, <span class="string">"Invalid info: "</span>+err.Error()))</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	utils.Respond(w, account.Create())</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>最终的实现是在account.Create()函数，位于account.go中：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(account *Account)</span> <span class="title">Create</span><span class="params">()</span> <span class="title">map</span>[<span class="title">string</span>]<span class="title">interface</span></span>&#123;&#125; &#123;</span><br><span class="line">	<span class="comment">// 校验 省略</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将密码做一个加密</span></span><br><span class="line">	hashedPassword, _ := bcrypt.GenerateFromPassword([]<span class="keyword">byte</span>(account.Password), bcrypt.DefaultCost)</span><br><span class="line">	account.Password = <span class="keyword">string</span>(hashedPassword)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建数据库数据</span></span><br><span class="line">	err := GetDB().Create(account).Error</span><br><span class="line"></span><br><span class="line">	<span class="comment">// ...</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 创建Token</span></span><br><span class="line">	tk := &amp;Token&#123;UserId: account.ID&#125;</span><br><span class="line">	token := jwt.NewWithClaims(jwt.GetSigningMethod(<span class="string">"HS256"</span>), tk)</span><br><span class="line">	tokenString, _ := token.SignedString([]<span class="keyword">byte</span>(os.Getenv(<span class="string">"token_password"</span>)))</span><br><span class="line">	account.Token = tokenString</span><br><span class="line"></span><br><span class="line">	account.Password = <span class="string">""</span></span><br><span class="line">	response := u.MessageWithData(<span class="literal">true</span>, <span class="string">"Account has been created"</span>, account)</span><br><span class="line">	<span class="keyword">return</span> response</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>关键就在于创建Token这一步，我们调用jwt.NewWithClaims来生成Token，参数有两个，第一个是签名方法，采用HS256，第二个就是一个Token对象，这个对象即将被编码到Token中，这也是我们在进行认证的时候，从Token解析出来的对象。</p>
+<h3 id="登录功能"><a href="#登录功能" class="headerlink" title="登录功能"></a>登录功能</h3><p>登录功能与注册功能类似，只是把创建数据改为校验用户名密码。</p>
+<h2 id="运行部署"><a href="#运行部署" class="headerlink" title="运行部署"></a>运行部署</h2><p>我们可以直接在Goland中运行程序，默认会运行在8081端口，然后便可以用Postman或者curl调试相应接口，这部分内容请读者自行研究。</p>
+<p>注：笔者在mac os 10.15上，发现编译时需要添加-ldflags “-w”参数，否则会运行失败。</p>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>本文介绍了如何使用Golang + jwt构建一个建议的认证系统，可以让大家对用户认证有一个基本的概念，详细的代码也已经同步到github上，读者们可以clone下来参考：<a href="https://github.com/glorinli/go-jwt-simple-auth" target="_blank" rel="noopener">https://github.com/glorinli/go-jwt-simple-auth</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.075Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2019/11/23/Golang-jwt-simple-auth/" target="_blank" rel="external">https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Auth/" rel="tag">Auth</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Golang/" rel="tag">Golang</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Jwt/" rel="tag">Jwt</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&title=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&title=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/03/16/android_context/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">【Android】关于 Context 的一些想法</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2019/11/13/android_arouter_intro/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">【Android】ARouter 入门</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&title=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&title=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Golang】Golang + jwt 实现简易用户认证》 — Glorin&url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2019/11/23/Golang-jwt-simple-auth/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

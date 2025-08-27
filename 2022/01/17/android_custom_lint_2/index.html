@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Android】自定义 Lint 检查（二） | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android">
+    <meta name="description" content="背景上一篇文章我们讲了如何自定义一个简单的 lint 检查规则，这篇文章我们讲讲 lint 规则如何发布与集成。 问题上一篇文章中，我们编写的 lint 规则，通过 implementation project(&amp;#39;:wrapper&amp;#39;) 在主工程中引入我们的规则，但是在一般实际生产的场景中，我们很少通过源码的方式去依赖，而是更偏向于使用 gradle 依赖来实现，本文就来讲讲如何将我">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】自定义 Lint 检查（二）">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2022&#x2F;01&#x2F;17&#x2F;android_custom_lint_2&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="背景上一篇文章我们讲了如何自定义一个简单的 lint 检查规则，这篇文章我们讲讲 lint 规则如何发布与集成。 问题上一篇文章中，我们编写的 lint 规则，通过 implementation project(&amp;#39;:wrapper&amp;#39;) 在主工程中引入我们的规则，但是在一般实际生产的场景中，我们很少通过源码的方式去依赖，而是更偏向于使用 gradle 依赖来实现，本文就来讲讲如何将我">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;imgs&#x2F;2022-02-24-22-36-47.png">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.076Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;imgs&#x2F;2022-02-24-22-36-47.png">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Android】自定义 Lint 检查（二）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Android】自定义 Lint 检查（二）</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2022-01-17T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2022-01-18
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#背景"><span class="post-toc-number">1.</span> <span class="post-toc-text">背景</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#问题"><span class="post-toc-number">2.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#解决方法"><span class="post-toc-number">3.</span> <span class="post-toc-text">解决方法</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#升级-Gradle-和-lint-library"><span class="post-toc-number">3.1.</span> <span class="post-toc-text">升级 Gradle 和 lint library</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#发布到-Maven"><span class="post-toc-number">3.2.</span> <span class="post-toc-text">发布到 Maven</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#1-配置-maven-plugin"><span class="post-toc-number">3.2.1.</span> <span class="post-toc-text">1. 配置 maven plugin</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-打包发布"><span class="post-toc-number">3.2.2.</span> <span class="post-toc-text">2. 打包发布</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#代码"><span class="post-toc-number">4.</span> <span class="post-toc-text">代码</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-android_custom_lint_2"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Android】自定义 Lint 检查（二）</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2022-01-18 00:00:00" datetime="2022-01-17T16:00:00.000Z"  itemprop="datePublished">2022-01-18</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h1><p>上一篇文章我们讲了如何自定义一个简单的 lint 检查规则，这篇文章我们讲讲 lint 规则如何发布与集成。</p>
+<h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>上一篇文章中，我们编写的 lint 规则，通过 <code>implementation project(&#39;:wrapper&#39;)</code> 在主工程中引入我们的规则，但是在一般实际生产的场景中，我们很少通过源码的方式去依赖，而是更偏向于使用 gradle 依赖来实现，本文就来讲讲如何将我们的自定义 lint 规则发布到 maven，从而使其他工程可以直接用 gradle 依赖的方式来使用。</p>
+<h1 id="解决方法"><a href="#解决方法" class="headerlink" title="解决方法"></a>解决方法</h1><h2 id="升级-Gradle-和-lint-library"><a href="#升级-Gradle-和-lint-library" class="headerlink" title="升级 Gradle 和 lint library"></a>升级 Gradle 和 lint library</h2><p>在写这篇文章的时候，gradle 和 Android Gradle Plugin 都有了较大的版本升级，这里有一个限制需要注意：<strong>自定义 lint 工程的 AGP，必须和使用 lint 规则的工程（主工程）的 AGP 版本一致，否则可能出现无法正常使用的问题</strong>。<br>由于我的主工程的 AGP 是 7.0.3，因此我们将 Lint 工程的 AGP 也同步升级到 7.0.3.<br>这边有一个官方文档没有说得很清楚的点，就是 lint library 的版本，应该和 AGP 的版本是一一对应的，具体的对应规则就是：<br><strong>如果 AGP 版本是 x.y.z，那么 lint 的版本应该是 (x+23).y.z</strong><br>所以对应 AGP 7.0.3 的 lint library 版本就是 30.0.3，我们修改相应的依赖如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">compileOnly <span class="string">"com.android.tools.lint:lint-api:$LINT_VERSION"</span></span><br><span class="line">compileOnly <span class="string">"com.android.tools.lint:lint-checks:$LINT_VERSION"</span></span><br></pre></td></tr></table></figure>
+<p>其中 LINT_VERSION = 30.0.3</p>
+<p>注：AGP7 以上需要 Java 11 的环境，因此如果升级后无法编译，需要安装 Java 11 且在 AS 里面把 JDK 设置为 Java 11.</p>
+<h2 id="发布到-Maven"><a href="#发布到-Maven" class="headerlink" title="发布到 Maven"></a>发布到 Maven</h2><p>接下来就是发布到 maven repo 了，其实就是将 wrapper module 发布到 maven，如果你已经很熟悉 gradle maven 的发布，那下面的内容就可以不用看了。<br>要发布到maven，我们只需要两个步骤：</p>
+<h3 id="1-配置-maven-plugin"><a href="#1-配置-maven-plugin" class="headerlink" title="1. 配置 maven plugin"></a>1. 配置 maven plugin</h3><p>由于新版本的 AGP 已经集成了 maven plugin，所以我们不需要再使用第三方的插件了，直接在 wrapper module 下新建一个 maven.gradle，内容如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line">apply <span class="string">plugin:</span> <span class="string">'maven-publish'</span></span><br><span class="line"></span><br><span class="line">group = GROUP</span><br><span class="line">version = VERSION</span><br><span class="line"><span class="keyword">def</span> repositoryUrl = MAVEN_REPOSITORY_URL</span><br><span class="line"></span><br><span class="line">afterEvaluate &#123;</span><br><span class="line">    publishing &#123;</span><br><span class="line">        publications &#123;</span><br><span class="line">            <span class="comment">// Creates a Maven publication called "release".</span></span><br><span class="line">            release(MavenPublication) &#123;</span><br><span class="line">                <span class="comment">// Applies the component for the release build variant.</span></span><br><span class="line">                from components.release</span><br><span class="line"></span><br><span class="line">                <span class="comment">// You can then customize attributes of the publication as shown below.</span></span><br><span class="line">                groupId = GROUP</span><br><span class="line">                artifactId = ARTIFACT_ID</span><br><span class="line">                version = VERSION</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        repositories &#123;</span><br><span class="line">            maven &#123;</span><br><span class="line">                allowInsecureProtocol <span class="literal">true</span></span><br><span class="line">                url = repositoryUrl</span><br><span class="line"></span><br><span class="line">                credentials &#123;</span><br><span class="line">                    username MAVEN_USER</span><br><span class="line">                    password MAVEN_PWD</span><br><span class="line">                &#125;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    publish &#123;</span><br><span class="line">        doLast &#123;</span><br><span class="line">            println <span class="string">"*********************************************************************************"</span></span><br><span class="line">            println <span class="string">"Lint Checker Uploaded"</span></span><br><span class="line">            println <span class="string">"Group           : "</span> + GROUP</span><br><span class="line">            println <span class="string">"ArtifactId      : "</span> + ARTIFACT_ID</span><br><span class="line">            println <span class="string">"Version         : "</span> + version</span><br><span class="line">            println <span class="string">"Repository      : "</span> + repositoryUrl</span><br><span class="line">            println <span class="string">"*********************************************************************************"</span></span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>其中有几个参数是定义在项目根目录下的 gradle.properties 里面的：</p>
+<ul>
+<li>GROUP: maven 组，例如 xyz.glorin.lint</li>
+<li>ARTIFACT_ID: 产物的ID，例如 customlint</li>
+<li>VERSION: 版本号</li>
+<li>MAVEN_REPOSITORY_URL: Maven 仓库地址</li>
+<li>MAVEN_USER: Maven 仓库用户名（开启了认证的情况下才需要）</li>
+<li>MAVEN_PWD: Maven 仓库密码<br>最终我们在主工程使用的时候，完整的依赖就是:<br><code>$GROUP:$ARTIFACT_ID:$VERSION (xyz.glorin.lint:customlint:1.0.0)</code><h3 id="2-打包发布"><a href="#2-打包发布" class="headerlink" title="2. 打包发布"></a>2. 打包发布</h3>只需要执行: <code>./gradlew :wrapper:publish</code> 即可发布成功。<br>或者在 AS Gradle 界面执行task：<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="/imgs/2022-02-24-22-36-47.png" alt="publish task" title="">
+                </div>
+                <div class="image-caption">publish task</div>
+            </figure>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1>本文工程代码: <a href="https://github.com/glorinli/CustomLintChecker" target="_blank" rel="noopener">https://github.com/glorinli/CustomLintChecker</a><br>顺便推荐一个免费的 Maven server: <a href="https://repsy.io/" target="_blank" rel="noopener">https://repsy.io/</a></li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.076Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2022/01/17/android_custom_lint_2/" target="_blank" rel="external">https://glorin.xyz/2022/01/17/android_custom_lint_2/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">Android</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&title=《【Android】自定义 Lint 检查（二）》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&title=《【Android】自定义 Lint 检查（二）》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2022/01/17/android_custom_lint_2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】自定义 Lint 检查（二）》 — Glorin&url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2022/03/16/kotlin_knowledges/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Kotlin 知识集合</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/10/31/android_custom_lint/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">【Android】自定义 Lint 检查（一）</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&title=《【Android】自定义 Lint 检查（二）》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&title=《【Android】自定义 Lint 检查（二）》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2022/01/17/android_custom_lint_2/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】自定义 Lint 检查（二）》 — Glorin&url=https://glorin.xyz/2022/01/17/android_custom_lint_2/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2022/01/17/android_custom_lint_2/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2022/01/17/android_custom_lint_2/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

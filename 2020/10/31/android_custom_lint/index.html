@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Android】自定义 Lint 检查（一） | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android">
+    <meta name="description" content="问题Android lint 是一个静态代码扫描工具，sdk 本身已经支持了一些检查规则，但是有时候我们需要根据自己的业务或者代码规范自定义一些检查规则，这时候就需要用到自定义 lint 的功能，本文介绍如何自定义一个 lint 检查规则。 环境MacOS Catalina + Android Studio 4.1 + Gralde 6.5 工程结构首先创建一个 Android 工程，我将它命名为">
+<meta name="keywords" content="Android">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】自定义 Lint 检查（一）">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2020&#x2F;10&#x2F;31&#x2F;android_custom_lint&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="问题Android lint 是一个静态代码扫描工具，sdk 本身已经支持了一些检查规则，但是有时候我们需要根据自己的业务或者代码规范自定义一些检查规则，这时候就需要用到自定义 lint 的功能，本文介绍如何自定义一个 lint 检查规则。 环境MacOS Catalina + Android Studio 4.1 + Gralde 6.5 工程结构首先创建一个 Android 工程，我将它命名为">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.076Z">
+<meta name="twitter:card" content="summary">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Android】自定义 Lint 检查（一）</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Android】自定义 Lint 检查（一）</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-10-31T16:00:00.000Z" itemprop="datePublished" class="page-time">
+  2020-11-01
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#问题"><span class="post-toc-number">1.</span> <span class="post-toc-text">问题</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#环境"><span class="post-toc-number">2.</span> <span class="post-toc-text">环境</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#工程结构"><span class="post-toc-number">3.</span> <span class="post-toc-text">工程结构</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Checker-模块"><span class="post-toc-number">4.</span> <span class="post-toc-text">Checker 模块</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Gradle-配置"><span class="post-toc-number">4.1.</span> <span class="post-toc-text">Gradle 配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Detector"><span class="post-toc-number">4.2.</span> <span class="post-toc-text">Detector</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Registry"><span class="post-toc-number">4.3.</span> <span class="post-toc-text">Registry</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#META-INF-配置"><span class="post-toc-number">4.4.</span> <span class="post-toc-text">META-INF 配置</span></a></li></ol></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#Wrapper"><span class="post-toc-number">5.</span> <span class="post-toc-text">Wrapper</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#App"><span class="post-toc-number">6.</span> <span class="post-toc-text">App</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#代码"><span class="post-toc-number">7.</span> <span class="post-toc-text">代码</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-android_custom_lint"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Android】自定义 Lint 检查（一）</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-11-01 00:00:00" datetime="2020-10-31T16:00:00.000Z"  itemprop="datePublished">2020-11-01</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h1 id="问题"><a href="#问题" class="headerlink" title="问题"></a>问题</h1><p>Android lint 是一个静态代码扫描工具，sdk 本身已经支持了一些检查规则，但是有时候我们需要根据自己的业务或者代码规范自定义一些检查规则，这时候就需要用到自定义 lint 的功能，本文介绍如何自定义一个 lint 检查规则。</p>
+<h1 id="环境"><a href="#环境" class="headerlink" title="环境"></a>环境</h1><p>MacOS Catalina + Android Studio 4.1 + Gralde 6.5</p>
+<h1 id="工程结构"><a href="#工程结构" class="headerlink" title="工程结构"></a>工程结构</h1><p>首先创建一个 Android 工程，我将它命名为 CustomLintChecker，默认带有一个 app 模块，我们另外创建两个模块：</p>
+<ol>
+<li>checker 模块，是一个 <strong>Java Library</strong></li>
+<li>wrapper 模块，是一个 <strong>Android Library</strong></li>
+</ol>
+<p>最终工程结构如下:</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">CustomLintChecker</span><br><span class="line">+ app</span><br><span class="line">+ wrapper</span><br><span class="line">+ checker</span><br></pre></td></tr></table></figure>
+
+<h1 id="Checker-模块"><a href="#Checker-模块" class="headerlink" title="Checker 模块"></a>Checker 模块</h1><h2 id="Gradle-配置"><a href="#Gradle-配置" class="headerlink" title="Gradle 配置"></a>Gradle 配置</h2><p>Checker 模块是 lint 的检查逻辑，首先我们在 build.gradle 中引入 lint-api 及 <code>com.android.lint</code> 插件:</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">plugins &#123;</span><br><span class="line">    id <span class="string">'java-library'</span></span><br><span class="line">    id <span class="string">'kotlin'</span></span><br><span class="line">    id <span class="string">'com.android.lint'</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">dependencies &#123;</span><br><span class="line">    compileOnly <span class="string">"org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"</span></span><br><span class="line"></span><br><span class="line">    <span class="keyword">def</span> lint_version = <span class="string">'27.1.0'</span></span><br><span class="line">    compileOnly <span class="string">"com.android.tools.lint:lint-api:$lint_version"</span></span><br><span class="line">    compileOnly <span class="string">"com.android.tools.lint:lint-checks:$lint_version"</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>值得注意的是这边的依赖全部用 compileOnly，否则可能会导致依赖冲突。</p>
+<h2 id="Detector"><a href="#Detector" class="headerlink" title="Detector"></a>Detector</h2><p>配置完 gradle 之后，我们便着手编写我们的 lint 检查规则，此处以一个 log 检查为示例，我们的目标是检测到代码中使用了  <code>android.util.Log</code> 时，提示用户修改为 <code>Timber</code></p>
+<p>Detector 代码如下，相关代码作用见注释</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 集成 Detector类，并实现 SourceScanner 接口</span></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">AndroidLogDetector</span> : <span class="type">Detector</span></span>(), SourceCodeScanner &#123;</span><br><span class="line">    <span class="comment">// 获取感兴趣的方法名，可以理解为让 lint 规则应用于返回的方法名列表，因为我们不可能检测每一个方法，所以此处要限定范围。</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">getApplicableMethodNames</span><span class="params">()</span></span>: List&lt;String&gt;? &#123;</span><br><span class="line">        <span class="keyword">return</span> listOf(<span class="string">"wtf"</span>, <span class="string">"v"</span>, <span class="string">"d"</span>, <span class="string">"i"</span>, <span class="string">"w"</span>, <span class="string">"e"</span>)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// visitMethodCall 回调，当 lint 运行到上面的方法调用时，便会调用这个方法，我们在这里处理检测逻辑</span></span><br><span class="line">    <span class="keyword">override</span> <span class="function"><span class="keyword">fun</span> <span class="title">visitMethodCall</span><span class="params">(context: <span class="type">JavaContext</span>, node: <span class="type">UCallExpression</span>, method: <span class="type">PsiMethod</span>)</span></span> &#123;</span><br><span class="line">        <span class="comment">// 判断方法是否是 android.util.Log 的方法</span></span><br><span class="line">        <span class="keyword">if</span> (context.evaluator.isMemberInClass(method, <span class="string">"android.util.Log"</span>)) &#123;</span><br><span class="line">            <span class="comment">// 报告问题，第一个参数 ISSUE 是问题的数据，在后面定义，第二个参数是要报告的位置，可以理解为代码的位置，后面是一个 Message</span></span><br><span class="line">            context.report(ISSUE, context.getLocation(node), <span class="string">"Don't use Android log directly"</span>)</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="keyword">companion</span> <span class="keyword">object</span> &#123;</span><br><span class="line">        <span class="comment">// 此处便是上面用到的 ISSUE，很容易理解相关参数的含义，此处不再赘述</span></span><br><span class="line">        <span class="keyword">val</span> ISSUE = Issue.create(</span><br><span class="line">            <span class="string">"AndroidLogDeprecated"</span>,</span><br><span class="line">            <span class="string">"Please don't use android log directly, use Timber instead"</span>,</span><br><span class="line">            <span class="string">"Please don't use android log directly, use Timber instead"</span>,</span><br><span class="line">            Category.LINT,</span><br><span class="line">            <span class="number">5</span>,</span><br><span class="line">            Severity.WARNING,</span><br><span class="line">            Implementation(AndroidLogDetector::<span class="class"><span class="keyword">class</span>.<span class="title">java</span>, <span class="type">Scope.JAVA_FILE_SCOPE)</span></span></span><br><span class="line">        )</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="Registry"><a href="#Registry" class="headerlink" title="Registry"></a>Registry</h2><p>编写完 Detector 后，我们要对规则进行注册，这样 IDE 或者 gradle lint，才能加载我们的 Detector。此处我们需要一个 Registry 类，代码如下：</p>
+<figure class="highlight kotlin"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> xyz.glorin.customlint.checker</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> com.android.tools.lint.client.api.IssueRegistry</span><br><span class="line"><span class="keyword">import</span> xyz.glorin.customlint.checker.detectors.AndroidLogDetector</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">class</span> <span class="title">CustomRegistry</span> : <span class="type">IssueRegistry</span></span>() &#123;</span><br><span class="line">    <span class="keyword">override</span> <span class="keyword">val</span> issues = listOf(</span><br><span class="line">        AndroidLogDetector.ISSUE</span><br><span class="line">    )</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>这个类非常简单，继承了 <code>IssueRegistry</code>，并修改了 <code>issues</code> 字段，很容易理解这是在注册这个 ISSUE。</p>
+<h2 id="META-INF-配置"><a href="#META-INF-配置" class="headerlink" title="META-INF 配置"></a>META-INF 配置</h2><p>为了完成注册，我们还需要配置一个 IssueRegistry 文件，这样 lint 框架才能读取到我们的 Registry，这个类的路径是: <code>checker/src/main/resources/META-INF/services/com.android.tools.lint.client.api.IssueRegistry</code>，文件内容页很简单：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">xyz.glorin.customlint.checker.CustomRegistry</span><br></pre></td></tr></table></figure>
+<p>其实就是咱们的 Registry 类的完整类名。<br>如此我们的 checker 模块算是完成了。</p>
+<h1 id="Wrapper"><a href="#Wrapper" class="headerlink" title="Wrapper"></a>Wrapper</h1><p>checker 模块是一个 Java 模块，编译完成后，是一个 jar，传统的应用 lint 规则的方式是，把这个 jar 放在 <code>~/.android/lint</code> 目录下，但是这样十分不方便维护，且会应用到所有项目中，于是我们需要寻求其他方式。</p>
+<p>好在 gradle 支持读取 aar 中的 lint.jar 并应用相应规则，且在新版 gradle 中新增了 <code>lintPublish</code> 方法支持更快捷地打包 lint 检测规则，我们要做的很简单，就是修改 wrapper 模块的 build.gradle 文件，内容如下：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line">dependencies &#123;</span><br><span class="line">    lintPublish project(<span class="string">':checker'</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>由于这只是一个简单的 wrapper 项目，因此可以考虑将 dependencies 其他内容都删除。</p>
+<h1 id="App"><a href="#App" class="headerlink" title="App"></a>App</h1><p>wrapper 模块也编写完成，其实 lint 检测规则的工程已经配置完成了，我们接下来就要试试效果，在 app 模块的 build.gradle 文件中，依赖 wrapper 模块：</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">implementation project(<span class="string">':wrapper'</span>)</span><br></pre></td></tr></table></figure>
+<p>然后在 <code>MainActivity.kt</code> 中，写下 Log 代码，此时 lint 不一定即时生效，可以在 terminal 中，运行一下命令：</p>
+<figure class="highlight sh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./gradlew :app:lint</span><br></pre></td></tr></table></figure>
+<p>运行完成后，会输出 lint 检查报告，不出意外地话，IDE 也会出现相应的提示了。</p>
+<h1 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h1><p>本文工程代码: <a href="https://github.com/glorinli/CustomLintChecker" target="_blank" rel="noopener">https://github.com/glorinli/CustomLintChecker</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.076Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2020/10/31/android_custom_lint/" target="_blank" rel="external">https://glorin.xyz/2020/10/31/android_custom_lint/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">Android</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/10/31/android_custom_lint/&title=《【Android】自定义 Lint 检查（一）》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/10/31/android_custom_lint/&title=《【Android】自定义 Lint 检查（一）》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/10/31/android_custom_lint/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】自定义 Lint 检查（一）》 — Glorin&url=https://glorin.xyz/2020/10/31/android_custom_lint/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/10/31/android_custom_lint/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2022/01/17/android_custom_lint_2/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">【Android】自定义 Lint 检查（二）</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/07/26/android_activity_launching/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">【Android】Android Activity 启动流程简析(基于Android 10 代码)</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/10/31/android_custom_lint/&title=《【Android】自定义 Lint 检查（一）》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/10/31/android_custom_lint/&title=《【Android】自定义 Lint 检查（一）》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/10/31/android_custom_lint/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】自定义 Lint 检查（一）》 — Glorin&url=https://glorin.xyz/2020/10/31/android_custom_lint/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/10/31/android_custom_lint/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2020/10/31/android_custom_lint/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>

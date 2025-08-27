@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+<!-- Baidu Tongji -->
+<script>var _hmt = _hmt || []</script>
+<script async src="//hm.baidu.com/hm.js?f5577b99cd40d2ae81f4ef6c3d6d6127"></script>
+<!-- End Baidu Tongji -->
+
+
+
+
+    <meta charset="utf-8">
+    
+    
+    
+    <title>【Android】Bad method handle type 7 解决办法 | Glorin | Coding changes the world.</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#3F51B5">
+    
+    
+    <meta name="keywords" content="Android,构建,Gradle">
+    <meta name="description" content="今天在创建一个Demo项目的时候，某次编译运行后，发现一打开就闪退，查看闪退日志如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546472020-03-31 19:24:40.776 29643-29643&#x2F;xyz.glorin.gankyo E&#x2F;AndroidRuntime:">
+<meta name="keywords" content="Android,构建,Gradle">
+<meta property="og:type" content="article">
+<meta property="og:title" content="【Android】Bad method handle type 7 解决办法">
+<meta property="og:url" content="https:&#x2F;&#x2F;glorin.xyz&#x2F;2020&#x2F;03&#x2F;31&#x2F;android_Bad_method_handle_type_7&#x2F;index.html">
+<meta property="og:site_name" content="Glorin">
+<meta property="og:description" content="今天在创建一个Demo项目的时候，某次编译运行后，发现一打开就闪退，查看闪退日志如下： 12345678910111213141516171819202122232425262728293031323334353637383940414243444546472020-03-31 19:24:40.776 29643-29643&#x2F;xyz.glorin.gankyo E&#x2F;AndroidRuntime:">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2025-08-27T07:45:35.075Z">
+<meta name="twitter:card" content="summary">
+    
+    <link rel="shortcut icon" href="/imgs/favicon/favicon.ico">
+    <link rel="stylesheet" href="//unpkg.com/hexo-theme-material-indigo@latest/css/style.css">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">Glorin</h5>
+          <a href="mailto:ligr1991@gmail.com" target="_blank" rel="noopener" title="ligr1991@gmail.com" class="mail">ligr1991@gmail.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                Archives
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                Tags
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                Categories
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/glorinli" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>
+    </div>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">【Android】Bad method handle type 7 解决办法</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" target="_blank" rel="noopener" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">【Android】Bad method handle type 7 解决办法</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2020-03-31T12:19:00.000Z" itemprop="datePublished" class="page-time">
+  2020-03-31
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-android_Bad_method_handle_type_7"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">【Android】Bad method handle type 7 解决办法</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2020-03-31 20:19:00" datetime="2020-03-31T12:19:00.000Z"  itemprop="datePublished">2020-03-31</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/android/">Android</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>今天在创建一个Demo项目的时候，某次编译运行后，发现一打开就闪退，查看闪退日志如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">2020</span>-<span class="number">03</span>-<span class="number">31</span> <span class="number">19</span>:<span class="number">24</span>:<span class="number">40.776</span> <span class="number">29643</span>-<span class="number">29643</span>/xyz.glorin.gankyo E/AndroidRuntime: FATAL EXCEPTION: main</span><br><span class="line">    Process: xyz.glorin.gankyo, PID: <span class="number">29643</span></span><br><span class="line">    java.lang.RuntimeException: Unable to instantiate application xyz.glorin.gankyo.App: java.lang.ClassNotFoundException: Didn<span class="string">'t find class "xyz.glorin.gankyo.App" on path: DexPathList[[zip file "/data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/base.apk"],nativeLibraryDirectories=[/data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/lib/arm64, /system/lib64, /system/vendor/lib64]]</span></span><br><span class="line"><span class="string">        at android.app.LoadedApk.makeApplication(LoadedApk.java:978)</span></span><br><span class="line"><span class="string">        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:5851)</span></span><br><span class="line"><span class="string">        at android.app.ActivityThread.-wrap1(Unknown Source:0)</span></span><br><span class="line"><span class="string">        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:1690)</span></span><br><span class="line"><span class="string">        at android.os.Handler.dispatchMessage(Handler.java:105)</span></span><br><span class="line"><span class="string">        at android.os.Looper.loop(Looper.java:173)</span></span><br><span class="line"><span class="string">        at android.app.ActivityThread.main(ActivityThread.java:6698)</span></span><br><span class="line"><span class="string">        at java.lang.reflect.Method.invoke(Native Method)</span></span><br><span class="line"><span class="string">        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:240)</span></span><br><span class="line"><span class="string">        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:782)</span></span><br><span class="line">     Caused by: java.lang.ClassNotFoundException: Didn't find class "xyz.glorin.gankyo.App" on path: DexPathList[[zip file "/data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/base.apk"],nativeLibraryDirectories=[/data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/lib/arm64, /system/lib64, /system/vendor/lib64]]</span><br><span class="line">        at dalvik.system.BaseDexClassLoader.findClass(BaseDexClassLoader.java:<span class="number">93</span>)</span><br><span class="line">        at java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">379</span>)</span><br><span class="line">        at java.lang.ClassLoader.loadClass(ClassLoader.java:<span class="number">312</span>)</span><br><span class="line">        at android.app.Instrumentation.newApplication(Instrumentation.java:<span class="number">1087</span>)</span><br><span class="line">        at android.app.LoadedApk.makeApplication(LoadedApk.java:<span class="number">972</span>)</span><br><span class="line">        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:<span class="number">5851</span>) </span><br><span class="line">        at android.app.ActivityThread.-wrap1(Unknown Source:<span class="number">0</span>) </span><br><span class="line">        at android.app.ActivityThread$H.handleMessage(ActivityThread.java:<span class="number">1690</span>) </span><br><span class="line">        at android.os.Handler.dispatchMessage(Handler.java:<span class="number">105</span>) </span><br><span class="line">        at android.os.Looper.loop(Looper.java:<span class="number">173</span>) </span><br><span class="line">        at android.app.ActivityThread.main(ActivityThread.java:<span class="number">6698</span>) </span><br><span class="line">        at java.lang.reflect.Method.invoke(Native Method) </span><br><span class="line">        at com.android.internal.os.Zygote$MethodAndArgsCaller.run(Zygote.java:<span class="number">240</span>) </span><br><span class="line">        at com.android.internal.os.ZygoteInit.main(ZygoteInit.java:<span class="number">782</span>) </span><br><span class="line">    	Suppressed: java.io.IOException: Failed to open dex files from /data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/base.apk because: Failure to verify dex file <span class="string">'/data/app/xyz.glorin.gankyo-vTz_RQM4TTzoqJhZTkXffw==/base.apk'</span>: Bad method handle type <span class="number">7</span></span><br><span class="line">        at dalvik.system.DexFile.openDexFileNative(Native Method)</span><br><span class="line">        at dalvik.system.DexFile.openDexFile(DexFile.java:<span class="number">353</span>)</span><br><span class="line">        at dalvik.system.DexFile.&lt;init&gt;(DexFile.java:<span class="number">100</span>)</span><br><span class="line">        at dalvik.system.DexFile.&lt;init&gt;(DexFile.java:<span class="number">74</span>)</span><br><span class="line">        at dalvik.system.DexPathList.loadDexFile(DexPathList.java:<span class="number">374</span>)</span><br><span class="line">        at dalvik.system.DexPathList.makeDexElements(DexPathList.java:<span class="number">337</span>)</span><br><span class="line">        at dalvik.system.DexPathList.&lt;init&gt;(DexPathList.java:<span class="number">157</span>)</span><br><span class="line">        at dalvik.system.BaseDexClassLoader.&lt;init&gt;(BaseDexClassLoader.java:<span class="number">65</span>)</span><br><span class="line">        at dalvik.system.PathClassLoader.&lt;init&gt;(PathClassLoader.java:<span class="number">64</span>)</span><br><span class="line">        at com.android.internal.os.PathClassLoaderFactory.createClassLoader(PathClassLoaderFactory.java:<span class="number">43</span>)</span><br><span class="line">        at android.app.ApplicationLoaders.getClassLoader(ApplicationLoaders.java:<span class="number">69</span>)</span><br><span class="line">        at android.app.ApplicationLoaders.getClassLoader(ApplicationLoaders.java:<span class="number">36</span>)</span><br><span class="line">        at android.app.LoadedApk.createOrUpdateClassLoaderLocked(LoadedApk.java:<span class="number">681</span>)</span><br><span class="line">        at android.app.LoadedApk.getClassLoader(LoadedApk.java:<span class="number">714</span>)</span><br><span class="line">        at android.app.LoadedApk.getResources(LoadedApk.java:<span class="number">941</span>)</span><br><span class="line">        at android.app.ContextImpl.createAppContext(ContextImpl.java:<span class="number">2254</span>)</span><br><span class="line">        at android.app.ActivityThread.handleBindApplication(ActivityThread.java:<span class="number">5755</span>)</span><br><span class="line">        		... <span class="number">8</span> more</span><br></pre></td></tr></table></figure>
+
+<p>经过一番搜索，发现有人遇到相同问题: <a href="https://stackoverflow.com/a/50983181/4087988" target="_blank" rel="noopener">https://stackoverflow.com/a/50983181/4087988</a></p>
+<p>解决方案就是在 app/build.gralde 的 android 配置下，增加</p>
+<figure class="highlight groovy"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">compileOptions &#123;</span><br><span class="line">    sourceCompatibility JavaVersion.VERSION_1_8</span><br><span class="line">    targetCompatibility JavaVersion.VERSION_1_8</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>原因的话，是因为有一些类库可能使用了Java8的新特性，我们知道，Android对待Java8，是使用desugar来进行处理的，还原为低版本Java的字节码。设置这个sourceCompatibility，就是告诉gradle，我们有Java8的代码，需要额外处理，否则运行就失败了。</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2025-08-27T07:45:35.075Z" itemprop="dateUpdated">2025-08-27 15:45:35</time>
+</span><br>
+
+
+        
+        原创文章，转载请注明出处，本文链接：<a href="/2020/03/31/android_Bad_method_handle_type_7/" target="_blank" rel="external">https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/</a>
+        
+    </div>
+    <footer>
+        <a href="https://glorin.xyz">
+            <img src="/img/avatar.jpg" alt="Glorin">
+            Glorin
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/android/" rel="tag">Android</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Gradle/" rel="tag">Gradle</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/%E6%9E%84%E5%BB%BA/" rel="tag">构建</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&title=《【Android】Bad method handle type 7 解决办法》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&title=《【Android】Bad method handle type 7 解决办法》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】Bad method handle type 7 解决办法》 — Glorin&url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" target="_blank" rel="noopener" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/2020/06/05/ios_pod_workspace/" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">【iOS】Pod 错误 Could not automatically select an Xcode workspace</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/2020/03/16/android_context/" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">【Android】关于 Context 的一些想法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+        <footer class="footer">
+    <div class="top">
+        
+<p>
+    <span id="busuanzi_container_site_uv" style='display:none'>
+        站点总访客数：<span id="busuanzi_value_site_uv"></span>
+    </span>
+    <span id="busuanzi_container_site_pv" style='display:none'>
+        站点总访问量：<span id="busuanzi_value_site_pv"></span>
+    </span>
+</p>
+
+
+        <p>
+            
+            <span>博客内容遵循 <a rel="license noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh" target="_blank">知识共享 署名 - 非商业性 - 相同方式共享 4.0 国际协议</a></span>
+        </p>
+    </div>
+    <div class="bottom">
+        <p><span>Glorin &copy; 2015 - 2025</span>
+            <span>
+                
+                Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+            </span>
+        </p>
+    </div>
+</footer>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" target="_blank" rel="noopener" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&title=《【Android】Bad method handle type 7 解决办法》 — Glorin&pic=https://glorin.xyz/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" target="_blank" rel="noopener" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&title=《【Android】Bad method handle type 7 解决办法》 — Glorin&source=" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《【Android】Bad method handle type 7 解决办法》 — Glorin&url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/&via=https://glorin.xyz" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;" target="_blank" rel="noopener"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="//api.qrserver.com/v1/create-qr-code/?data=https://glorin.xyz/2020/03/31/android_Bad_method_handle_type_7/" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/main.min.js"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="//unpkg.com/hexo-theme-material-indigo@latest/js/search.min.js" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+
+
+</body>
+</html>
